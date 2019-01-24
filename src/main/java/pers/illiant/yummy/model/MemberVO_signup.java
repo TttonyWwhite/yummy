@@ -1,15 +1,15 @@
 package pers.illiant.yummy.model;
 
-public class MemberModel_signup {
+public class MemberVO_signup {
 
     private String name;
     private String email;
     private String password;
 
-    public MemberModel_signup() {
+    public MemberVO_signup() {
     }
 
-    public MemberModel_signup(String name, String email, String password) {
+    public MemberVO_signup(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;

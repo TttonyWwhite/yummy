@@ -1,14 +1,14 @@
 package pers.illiant.yummy.model;
 
-public class MemberModel_login {
+public class MemberVO_login {
 
     private String name;
     private String password;
 
-    public MemberModel_login() {
+    public MemberVO_login() {
     }
 
-    public MemberModel_login(String name, String password) {
+    public MemberVO_login(String name, String password) {
         this.name = name;
         this.password = password;
     }

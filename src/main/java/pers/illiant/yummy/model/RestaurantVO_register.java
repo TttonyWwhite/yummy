@@ -6,16 +6,18 @@ public class RestaurantVO_register {
     private String type;
     private String phoneNumber;
     private String imgUrl;
+    private String shopName;
 
     public RestaurantVO_register() {
     }
 
-    public RestaurantVO_register(String lng_lat, String address, String type, String phoneNumber, String imgUrl) {
+    public RestaurantVO_register(String lng_lat, String address, String type, String phoneNumber, String imgUrl, String shopName) {
         this.lng_lat = lng_lat;
         this.address = address;
         this.type = type;
         this.phoneNumber = phoneNumber;
         this.imgUrl = imgUrl;
+        this.shopName = shopName;
     }
 
     public String getLng_lat() {
@@ -56,5 +58,13 @@ public class RestaurantVO_register {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 }

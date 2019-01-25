@@ -20,4 +20,5 @@ public class RestaurantController {
     public boolean signupForRestaurant(@RequestBody RestaurantVO_register restaurant) {
         return restaurantService.register(restaurant);
     }
+
 }

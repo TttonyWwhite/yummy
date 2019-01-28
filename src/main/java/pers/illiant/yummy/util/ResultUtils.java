@@ -8,6 +8,10 @@ public class ResultUtils {
         return new Result<>(ResultCode.SUCCESS, data);
     }
 
+    public static Result success(){
+        return new Result(ResultCode.SUCCESS);
+    }
+
     public static Result error(int code, String message) {
         Result result = new Result();
         result.setMessage(message);

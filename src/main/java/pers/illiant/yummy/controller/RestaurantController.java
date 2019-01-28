@@ -1,10 +1,10 @@
 package pers.illiant.yummy.controller;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pers.illiant.yummy.entity.Restaurant;
+import pers.illiant.yummy.model.FoodVO_release;
+import pers.illiant.yummy.model.RestaurantVO;
 import pers.illiant.yummy.model.RestaurantVO_post;
 import pers.illiant.yummy.model.RestaurantVO_register;
 import pers.illiant.yummy.service.RestaurantService;
@@ -31,5 +31,17 @@ public class RestaurantController {
         List<RestaurantVO_post> restList = restaurantService.getAll();
 
         return ResultUtils.success(restList);
+    }
+
+    @RequestMapping("/releaseFood")
+    public Result releaseFood(@RequestBody FoodVO_release food) {
+        return restaurantService.releaseFood(food);
+    }
+
+
+    //todo 研究下怎么不用requestbody实现
+    @RequestMapping("/loginForRestaurant")
+    public Result login(@RequestBody RestaurantVO restaurant) {
+        return restaurantService.login(restaurant.getRestaurantId(), restaurant.getPassword());
     }
 }

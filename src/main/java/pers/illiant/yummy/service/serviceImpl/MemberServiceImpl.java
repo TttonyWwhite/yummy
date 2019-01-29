@@ -50,5 +50,15 @@ public class MemberServiceImpl implements MemberService {
         return false;
     }
 
+    @Override
+    public Member findByName(String name) {
+        return memberMapper.selectByName(name);
+    }
+
+    @Override
+    public Member findById(int id) {
+        return memberMapper.selectByPrimaryKey(id);
+    }
+
 
 }

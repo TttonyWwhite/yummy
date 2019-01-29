@@ -73,7 +73,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Result login(String id, String password) {
         Restaurant restaurant = restaurantMapper.selectByPrimaryKey(id);
-
+        if (restaurant == null)
+            return ResultUtils.error(3, "nonexistence");
         if (restaurant.getPassword().equals(password))
             return ResultUtils.success();
         else

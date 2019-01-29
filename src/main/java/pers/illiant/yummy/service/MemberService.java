@@ -11,5 +11,7 @@ public interface MemberService {
 
     boolean signup(String name, String email, String password);
 
+    Member findByName(String name);
 
+    Member findById(int id);
 }

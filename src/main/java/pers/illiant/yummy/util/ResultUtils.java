@@ -4,8 +4,8 @@ import pers.illiant.yummy.enums.ResultCode;
 
 public class ResultUtils {
 
-    public static Result success(Object data) {
-        return new Result<>(ResultCode.SUCCESS, data);
+    public static Result success(Object data){
+        return new Result<>(ResultCode.SUCCESS,data);
     }
 
     public static Result success(){

@@ -26,7 +26,7 @@ public class MemberController {
 
     @RequestMapping("/login")
     public Object login(@RequestBody MemberVO_login member) {
-        //return memberService.signin(member.getName(), member.getPassword());
+
         Member memberInDatabase = memberService.findByName(member.getName());
         JSONObject jsonObject = new JSONObject();
         if (memberInDatabase == null) {
@@ -46,12 +46,6 @@ public class MemberController {
     public boolean signup(@RequestBody MemberVO_signup member) {
         System.out.println(member.getName());
         return memberService.signup(member.getName(), member.getEmail(), member.getPassword());
-    }
-
-    @LoginRequired
-    @GetMapping("/test")
-    public Object testLogin() {
-        return "success";
     }
 
 }

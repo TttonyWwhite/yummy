@@ -61,4 +61,10 @@
     select foodId, restaurant_id, foodName, imgUrl, price, rate
     from food
   </select>
+
+  <select id="selectByRestaurantId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select foodId, restaurant_id, foodName, imgUrl, price, rate
+    from food
+    where restaurant_id = #{restaurantId, jdbcType=VARCHAR}
+  </select>
 </mapper>

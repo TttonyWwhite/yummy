@@ -80,4 +80,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         else
             return ResultUtils.error(2, "Wrong Password");
     }
+
+    @Override
+    public Restaurant findById(String id) {
+        return restaurantMapper.selectByPrimaryKey(id);
+    }
 }

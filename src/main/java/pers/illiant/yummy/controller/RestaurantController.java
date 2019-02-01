@@ -61,4 +61,10 @@ public class RestaurantController {
         return ResultUtils.success(retList);
     }
 
+    @RequestMapping("/getRestaurant")
+    public Result getRestaurant(@RequestParam String restaurantId) {
+        Restaurant restaurant = restaurantService.findById(restaurantId);
+        RestaurantVO_post vo = new RestaurantVO_post(restaurant);
+        return ResultUtils.success(vo);
+    }
 }

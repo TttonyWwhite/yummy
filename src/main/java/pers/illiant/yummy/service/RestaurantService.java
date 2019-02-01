@@ -16,4 +16,6 @@ public interface RestaurantService {
     Result releaseFood(FoodVO_release food);
 
     Result login(String id, String password);
+
+    Restaurant findById(String id);
 }

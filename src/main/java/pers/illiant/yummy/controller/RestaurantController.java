@@ -57,7 +57,6 @@ public class RestaurantController {
         for (Food food : list) {
             retList.add(new FoodVO_post(food));
         }
-
         return ResultUtils.success(retList);
     }
 

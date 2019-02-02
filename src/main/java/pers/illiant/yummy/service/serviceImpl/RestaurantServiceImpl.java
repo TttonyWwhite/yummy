@@ -47,6 +47,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             RestaurantVO_post vo = new RestaurantVO_post();
             vo.setShopName(rest.getShopName());
             vo.setImgUrl(rest.getImgurl());
+            vo.setRestaurantId(rest.getRestaurantId());
             retList.add(vo);
         }
 

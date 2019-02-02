@@ -3,6 +3,7 @@ package pers.illiant.yummy.model;
 import pers.illiant.yummy.entity.Restaurant;
 
 public class RestaurantVO_post {
+    private String restaurantId;
     private String shopName;
     private int rate = 4;
     private double deliveryCost = 3;
@@ -21,17 +22,18 @@ public class RestaurantVO_post {
         this.imgUrl = imgUrl;
     }
 
-    public RestaurantVO_post(String shopName, int rate, double deliveryCost, String imgUrl) {
+    public RestaurantVO_post(String shopName, int rate, double deliveryCost, String imgUrl, String restaurantId) {
         this.shopName = shopName;
         this.rate = rate;
         this.deliveryCost = deliveryCost;
         this.imgUrl = imgUrl;
+        this.restaurantId = restaurantId;
     }
 
     public RestaurantVO_post(Restaurant restaurant) {
         this.shopName = restaurant.getShopName();
         this.imgUrl = restaurant.getImgurl();
-
+        this.restaurantId = restaurant.getRestaurantId();
         //todo 要计算出rate和配送费用，现在先用一个虚拟值
     }
 
@@ -57,5 +59,13 @@ public class RestaurantVO_post {
 
     public void setDeliveryCost(double deliveryCost) {
         this.deliveryCost = deliveryCost;
+    }
+
+    public String getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
     }
 }

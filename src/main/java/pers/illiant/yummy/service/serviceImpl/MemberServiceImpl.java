@@ -32,8 +32,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean signup(String name, String email, String password) {
-        //todo 需要和前端确定传入的参数是一个member对象，还是各种属性
-        //暂定为member对象
 
         Member member = new Member();
         member.setEmail(email);

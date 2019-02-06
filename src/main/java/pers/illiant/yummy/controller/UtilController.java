@@ -8,7 +8,6 @@ import pers.illiant.yummy.util.TokenCreater;
 @RestController
 @EnableAutoConfiguration
 public class UtilController {
-    //todo create token for upload image
     @RequestMapping("/getToken")
     public String getToken() {
         String bucket = "yummy-bucket";

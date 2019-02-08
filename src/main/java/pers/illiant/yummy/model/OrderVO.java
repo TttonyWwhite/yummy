@@ -4,78 +4,75 @@ import java.util.Date;
 import java.util.List;
 
 public class OrderVO {
-    private int member_id;
-    private String restaurant_id;
-    private Date order_time;
-    private int order_id;
-    private Date expect_time;
-    private double price;
-    private double freight; //配送费
-    private String state; //订单状态，暂定为string类型
 
-    //todo 可以只传food的id列表回来
-    private List<Integer> foods;
+    private List<ProductVO> items;
+    private int orderId;
+    private String restaurantId;
+    private int memberId;
+    private Date orderTime;
+    private Date expectTime;
+    private double freight; //运费
 
 
     public OrderVO() {
     }
 
-    public OrderVO(int member_id, String restaurant_id, Date order_time, Date expect_time, double price, double freight, String state) {
-        this.member_id = member_id;
-        this.restaurant_id = restaurant_id;
-        this.order_time = order_time;
-        this.expect_time = expect_time;
-        this.price = price;
+    public OrderVO(List<ProductVO> items, String restaurantId, int memberId, Date orderTime, Date expectTime, double freight) {
+        this.items = items;
+        this.restaurantId = restaurantId;
+        this.memberId = memberId;
+        this.orderTime = orderTime;
+        this.expectTime = expectTime;
         this.freight = freight;
-        this.state = state;
     }
 
-    public int getMember_id() {
-        return member_id;
+
+    public List<ProductVO> getItems() {
+        return items;
     }
 
-    public void setMember_id(int member_id) {
-        this.member_id = member_id;
+    public void setItems(List<ProductVO> items) {
+        this.items = items;
     }
 
-    public String getRestaurant_id() {
-        return restaurant_id;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setRestaurant_id(String restaurant_id) {
-        this.restaurant_id = restaurant_id;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
-    public Date getOrder_time() {
-        return order_time;
+    public String getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setOrder_time(Date order_time) {
-        this.order_time = order_time;
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
-    public int getOrder_id() {
-        return order_id;
+    public int getMemberId() {
+        return memberId;
     }
 
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
     }
 
-    public Date getExpect_time() {
-        return expect_time;
+    public Date getOrderTime() {
+        return orderTime;
     }
 
-    public void setExpect_time(Date expect_time) {
-        this.expect_time = expect_time;
+    public void setOrderTime(Date orderTime) {
+        this.orderTime = orderTime;
     }
 
-    public double getPrice() {
-        return price;
+    public Date getExpectTime() {
+        return expectTime;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setExpectTime(Date expectTime) {
+        this.expectTime = expectTime;
     }
 
     public double getFreight() {
@@ -84,21 +81,5 @@ public class OrderVO {
 
     public void setFreight(double freight) {
         this.freight = freight;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public List<Integer> getFoods() {
-        return foods;
-    }
-
-    public void setFoods(List<Integer> foods) {
-        this.foods = foods;
     }
 }

@@ -3,6 +3,7 @@ package pers.illiant.yummy.controller;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pers.illiant.yummy.model.OrderVO;
 import pers.illiant.yummy.model.ProductVO;
@@ -25,5 +26,11 @@ public class ShoppingController {
         //将ordervo中属于info表的存到info表中，product部分存到product表中
         shoppingService.orderFood(order);
         return ResultUtils.success();
+    }
+
+    @RequestMapping("/getOrders")
+    public Result getOrders(@RequestParam Integer memberId) {
+
+        return shoppingService.getOrders(memberId);
     }
 }

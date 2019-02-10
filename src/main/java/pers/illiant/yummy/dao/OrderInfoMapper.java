@@ -46,4 +46,10 @@ public interface OrderInfoMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(OrderInfo record);
+
+    /**
+     * 根据用户id查询下达的订单
+     * @return 订单列表
+     */
+    List<OrderInfo> selectByMemberId(Integer memberId);
 }

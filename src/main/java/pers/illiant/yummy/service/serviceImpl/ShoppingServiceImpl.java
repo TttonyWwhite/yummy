@@ -4,15 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pers.illiant.yummy.dao.OrderInfoMapper;
 import pers.illiant.yummy.dao.OrderProductMapper;
+import pers.illiant.yummy.dao.RestaurantMapper;
 import pers.illiant.yummy.entity.OrderInfo;
 import pers.illiant.yummy.entity.OrderProduct;
+import pers.illiant.yummy.entity.Restaurant;
 import pers.illiant.yummy.model.OrderVO;
+import pers.illiant.yummy.model.OrderVO_post;
 import pers.illiant.yummy.model.ProductVO;
 import pers.illiant.yummy.service.ShoppingService;
 import pers.illiant.yummy.util.DateFormater;
 import pers.illiant.yummy.util.Result;
+import pers.illiant.yummy.util.ResultUtils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("shoppingService")
@@ -23,6 +29,9 @@ public class ShoppingServiceImpl implements ShoppingService {
 
     @Autowired
     OrderProductMapper orderProductMapper;
+
+    @Autowired
+    RestaurantMapper restaurantMapper;
 
     @Override
     public Result orderFood(OrderVO order) {
@@ -45,6 +54,32 @@ public class ShoppingServiceImpl implements ShoppingService {
            orderProductMapper.insert(product);
        }
 
-       return null;
+       return ResultUtils.success();
+    }
+
+    @Override
+    public Result getOrders(Integer memberId) {
+        List<OrderInfo> list = orderInfoMapper.selectByMemberId(memberId);
+        List<OrderVO_post> retList = new ArrayList<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        for (OrderInfo item : list) {
+            String restaurantId = item.getRestaurantId();
+            Restaurant restaurant = restaurantMapper.selectByPrimaryKey(restaurantId);
+
+            String state = "";
+            if (item.getState().equals("NotPaid")) {
+                state = "待付款";
+            } else if (item.getState().equals("Transporting")) {
+                state = "配送中";
+            } else if (item.getState().equals("Finished")) {
+                state = "已完成";
+            }
+
+            OrderVO_post vo = new OrderVO_post(item.getOrderId(), restaurant.getImgurl(), restaurant.getShopName(), formatter.format(item.getOrderTime()), item.getPrice(), state);
+            retList.add(vo);
+        }
+
+        return ResultUtils.success(retList);
     }
 }

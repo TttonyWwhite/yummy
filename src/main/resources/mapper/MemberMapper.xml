@@ -10,7 +10,7 @@
     <result column="member_name" jdbcType="VARCHAR" property="memberName" />
     <result column="member_password" jdbcType="VARCHAR" property="memberPassword" />
     <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="phoneNumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="default_address" jdbcType="VARCHAR" property="defaultAddress" />
     <result column="level" jdbcType="INTEGER" property="level" />
     <result column="active" jdbcType="BIT" property="active" />
@@ -35,7 +35,7 @@
       phoneNumber, default_address, `level`, 
       active)
     values (#{memberName,jdbcType=VARCHAR}, #{memberPassword,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{phonenumber,jdbcType=VARCHAR}, #{defaultAddress,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, 
+      #{phoneNumber,jdbcType=VARCHAR}, #{defaultAddress,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER},
       #{active,jdbcType=BIT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="pers.illiant.yummy.entity.Member">
@@ -47,7 +47,7 @@
     set member_name = #{memberName,jdbcType=VARCHAR},
       member_password = #{memberPassword,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
-      phoneNumber = #{phonenumber,jdbcType=VARCHAR},
+      phoneNumber = #{phoneNumber,jdbcType=VARCHAR},
       default_address = #{defaultAddress,jdbcType=VARCHAR},
       `level` = #{level,jdbcType=INTEGER},
       active = #{active,jdbcType=BIT}
@@ -77,4 +77,11 @@
     from member
     where member_name = #{memberName, jdbcType=VARCHAR}
   </select>
+
+  <update id="modifyInfo" parameterType="pers.illiant.yummy.entity.Member">
+    update member
+    set member_name = #{memberName,jdbcType=VARCHAR},
+      phoneNumber = #{phoneNumber,jdbcType=VARCHAR}
+    where member_id = #{memberId,jdbcType=INTEGER}
+  </update>
 </mapper>

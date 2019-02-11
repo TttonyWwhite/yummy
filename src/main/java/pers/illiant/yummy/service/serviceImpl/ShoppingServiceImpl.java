@@ -43,14 +43,14 @@ public class ShoppingServiceImpl implements ShoppingService {
        }
 
        OrderInfo info = new OrderInfo();
+        //此时订单状态为paid
+       info = new OrderInfo(order.getMemberId(), order.getRestaurantId(),order.getOrderTime(), order.getExpectTime(), price, order.getFreight(), "Paid");
 
-       info = new OrderInfo(order.getMemberId(), order.getRestaurantId(),order.getOrderTime(), order.getExpectTime(), price, order.getFreight(), "active");
 
-
-       int orderId = orderInfoMapper.insert(info);
+       orderInfoMapper.insert(info);
 
        for (ProductVO item : list) {
-           OrderProduct product = new OrderProduct(orderId, item.getTitle(), order.getRestaurantId(), item.getQty(), item.getPrice(), item.getId());
+           OrderProduct product = new OrderProduct(info.getOrderId(), item.getTitle(), order.getRestaurantId(), item.getQty(), item.getPrice(), item.getId());
            orderProductMapper.insert(product);
        }
 
@@ -70,8 +70,10 @@ public class ShoppingServiceImpl implements ShoppingService {
             String state = "";
             if (item.getState().equals("NotPaid")) {
                 state = "待付款";
+            }else if (item.getState().equals("Paid")) {
+                state = "已付款，待派送";
             } else if (item.getState().equals("Transporting")) {
-                state = "配送中";
+                state = "派送中";
             } else if (item.getState().equals("Finished")) {
                 state = "已完成";
             }

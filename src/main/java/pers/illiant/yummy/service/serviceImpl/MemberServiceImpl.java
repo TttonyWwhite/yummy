@@ -2,9 +2,14 @@ package pers.illiant.yummy.service.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pers.illiant.yummy.dao.AddressMapper;
 import pers.illiant.yummy.dao.MemberMapper;
+import pers.illiant.yummy.entity.Address;
 import pers.illiant.yummy.entity.Member;
+import pers.illiant.yummy.model.MemberVO_post;
 import pers.illiant.yummy.service.MemberService;
+import pers.illiant.yummy.util.Result;
+import pers.illiant.yummy.util.ResultUtils;
 
 import java.util.List;
 
@@ -13,6 +18,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberMapper memberMapper;
+
+    @Autowired
+    private AddressMapper addressMapper;
 
     public List<Member> findAll() {
         return memberMapper.selectAll();
@@ -56,6 +64,46 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member findById(int id) {
         return memberMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Result getMemberInfo(int memberId) {
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        MemberVO_post post = new MemberVO_post();
+        post.setMemberId(memberId);
+        post.setMemberName(member.getMemberName());
+        post.setPhoneNumber(member.getPhoneNumber());
+        List<Address> addresses = addressMapper.selectByMemberId(memberId);
+        post.setAddresses(addresses);
+        return ResultUtils.success(post);
+    }
+
+    @Override
+    public Result modifyAddress(Address address) {
+        try {
+            addressMapper.updateByPrimaryKey(address);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.error(11111, "地址更新失败");
+        }
+
+        return ResultUtils.success();
+    }
+
+    @Override
+    public Result modifyInfo(MemberVO_post memberVO_post) {
+        Member member = new Member();
+        member.setMemberId(memberVO_post.getMemberId());
+        member.setMemberName(memberVO_post.getMemberName());
+        member.setPhoneNumber(memberVO_post.getPhoneNumber());
+        try {
+            memberMapper.modifyInfo(member);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.error(11112, "用户信息更新失败");
+        }
+
+        return ResultUtils.success();
     }
 
 

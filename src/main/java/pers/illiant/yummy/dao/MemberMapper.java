@@ -53,4 +53,9 @@ public interface MemberMapper {
      * @return 对应名字的会员对象
      */
     Member selectByName(String memberName);
+
+    /**
+     * 修改用户资料
+     */
+    int modifyInfo(Member record);
 }

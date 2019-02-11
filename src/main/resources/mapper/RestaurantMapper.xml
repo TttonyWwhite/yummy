@@ -9,7 +9,7 @@
     <id column="restaurant_id" jdbcType="VARCHAR" property="restaurantId" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="type" jdbcType="VARCHAR" property="type" />
-    <result column="phoneNumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="lng_lat" jdbcType="VARCHAR" property="lngLat" />
     <result column="imgUrl" jdbcType="VARCHAR" property="imgurl" />
     <result column="shopName" jdbcType="VARCHAR" property="shopName" />
@@ -33,7 +33,7 @@
     </selectKey>
     insert into restaurant (restaurant_id, address, `type`, phoneNumber,
       lng_lat, imgUrl, shopName, `password`)
-    values (#{restaurantId, jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{phonenumber,jdbcType=VARCHAR},
+    values (#{restaurantId, jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR},
       #{lngLat,jdbcType=VARCHAR}, #{imgurl,jdbcType=VARCHAR}, #{shopName, jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="pers.illiant.yummy.entity.Restaurant">
@@ -44,7 +44,7 @@
     update restaurant
     set address = #{address,jdbcType=VARCHAR},
       `type` = #{type,jdbcType=VARCHAR},
-      phoneNumber = #{phonenumber,jdbcType=VARCHAR},
+      phoneNumber = #{phoneNumber,jdbcType=VARCHAR},
       lng_lat = #{lngLat,jdbcType=VARCHAR},
       imgUrl = #{imgurl,jdbcType=VARCHAR},
       shopName = #{shopName,jdbcType=VARCHAR},

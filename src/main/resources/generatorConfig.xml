@@ -72,17 +72,22 @@
             <!--<property name="useActualColumnNames" value="false" />-->
             <!--<generatedKey column="food_id" sqlStatement="Mysql" identity="true" />-->
         <!--</table>-->
-        <table tableName="order_info" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
-            <property name="useActualColumnNames" value="false" />
-            <!-- 数据库表主键 -->
-            <generatedKey column="order_id" sqlStatement="Mysql" identity="true" />
-        </table>
+        <!--<table tableName="order_info" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">-->
+            <!--<property name="useActualColumnNames" value="false" />-->
+            <!--&lt;!&ndash; 数据库表主键 &ndash;&gt;-->
+            <!--<generatedKey column="order_id" sqlStatement="Mysql" identity="true" />-->
+        <!--</table>-->
 
-        <table tableName="order_product" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
-            <property name="useActualColumnNames" value="false" />
-            <!-- 数据库表主键 -->
-            <generatedKey column="restaurant_id" sqlStatement="Mysql" identity="true" />
+        <!--<table tableName="order_product" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">-->
+            <!--<property name="useActualColumnNames" value="false" />-->
+            <!--&lt;!&ndash; 数据库表主键 &ndash;&gt;-->
+            <!--<generatedKey column="restaurant_id" sqlStatement="Mysql" identity="true" />-->
 
+        <!--</table>-->
+
+        <table tableName="address" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="useActualColumnNames" value="false" />
+            <generatedKey column="member_id" sqlStatement="Mysql" identity="true" />
         </table>
     </context>
 </generatorConfiguration>

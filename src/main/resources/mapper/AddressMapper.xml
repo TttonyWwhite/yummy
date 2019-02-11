@@ -29,9 +29,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into address (address_id, address, contactName, 
-      phoneNumber)
+      phoneNumber, member_id)
     values (#{addressId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR},
-      #{phoneNumber,jdbcType=VARCHAR})
+      #{phoneNumber,jdbcType=VARCHAR}, #{memberId, jdbcType=INTEGER})
   </insert>
   <update id="updateByPrimaryKey" parameterType="pers.illiant.yummy.entity.Address">
     <!--

@@ -62,4 +62,9 @@ public class MemberController {
 
         return memberService.modifyInfo(member);
     }
+
+    @RequestMapping("/addAddress")
+    public Result addAddress(@RequestBody Address address) {
+        return memberService.addAddress(address);
+    }
 }

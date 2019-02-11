@@ -106,5 +106,17 @@ public class MemberServiceImpl implements MemberService {
         return ResultUtils.success();
     }
 
+    @Override
+    public Result addAddress(Address address) {
+        try {
+            addressMapper.insert(address);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.error(11113, "增加地址失败");
+        }
+
+        return ResultUtils.success();
+    }
+
 
 }

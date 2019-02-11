@@ -23,4 +23,6 @@ public interface MemberService {
     Result modifyAddress(Address address);
 
     Result modifyInfo(MemberVO_post memberVO_post);
+
+    Result addAddress(Address address);
 }

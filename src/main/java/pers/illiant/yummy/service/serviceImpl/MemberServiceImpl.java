@@ -147,5 +147,11 @@ public class MemberServiceImpl implements MemberService {
         return ResultUtils.success(strList);
     }
 
+    @Override
+    public Result getMemberLevel(int memberId) {
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        return ResultUtils.success(member.getLevel());
+    }
+
 
 }

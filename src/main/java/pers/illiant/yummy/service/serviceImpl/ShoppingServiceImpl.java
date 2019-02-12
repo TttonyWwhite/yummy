@@ -18,6 +18,7 @@ import pers.illiant.yummy.util.MemberLevel;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +44,20 @@ public class ShoppingServiceImpl implements ShoppingService {
        double price = 0;
        for (ProductVO item : list) {
            price += item.getPrice() * item.getQty();
-
        }
+
+        //根据用户级别进行打折
+       DecimalFormat df = new DecimalFormat("0.00");
+       Member member = memberMapper.selectByPrimaryKey(order.getMemberId());
+       if (member.getLevel() == 4) {
+           price *= 0.85;
+       } else if (member.getLevel() == 3) {
+           price *= 0.92;
+       } else if (member.getLevel() == 2) {
+           price *= 0.95;
+       }
+       price = Double.parseDouble(df.format(price));
+
 
        OrderInfo info = new OrderInfo();
         //此时订单状态为paid

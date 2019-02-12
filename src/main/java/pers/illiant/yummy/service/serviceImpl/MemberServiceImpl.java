@@ -11,6 +11,8 @@ import pers.illiant.yummy.service.MemberService;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
 
+import javax.swing.text.Style;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("memberService")
@@ -116,6 +118,28 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return ResultUtils.success();
+    }
+
+    @Override
+    public Result getAddress(int memberId) {
+        List<Address> list = new ArrayList<>();
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        try {
+            list = addressMapper.selectByMemberId(memberId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.error(11114, "查询地址失败");
+        }
+
+        //默认地址要放在地址列表的第一个
+        List<String> strList = new ArrayList<>();
+        strList.add(member.getDefaultAddress());
+        for (Address item : list) {
+            if (!item.getAddress().equals(member.getDefaultAddress())) //不要重复添加默认地址
+                strList.add(item.getAddress());
+        }
+
+        return ResultUtils.success(strList);
     }
 
 

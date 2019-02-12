@@ -67,4 +67,10 @@ public class MemberController {
     public Result addAddress(@RequestBody Address address) {
         return memberService.addAddress(address);
     }
+
+    @RequestMapping("/getAddress")
+    public Result getAddress(@RequestParam Integer memberId) {
+
+        return memberService.getAddress(memberId);
+    }
 }

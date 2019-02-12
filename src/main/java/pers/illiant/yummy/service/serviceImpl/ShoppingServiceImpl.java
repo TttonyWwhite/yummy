@@ -12,11 +12,9 @@ import pers.illiant.yummy.model.OrderVO;
 import pers.illiant.yummy.model.OrderVO_post;
 import pers.illiant.yummy.model.ProductVO;
 import pers.illiant.yummy.service.ShoppingService;
-import pers.illiant.yummy.util.DateFormater;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +42,12 @@ public class ShoppingServiceImpl implements ShoppingService {
 
        OrderInfo info = new OrderInfo();
         //此时订单状态为paid
-       info = new OrderInfo(order.getMemberId(), order.getRestaurantId(),order.getOrderTime(), order.getExpectTime(), price, order.getFreight(), "Paid");
+       info = new OrderInfo(order.getMemberId(), order.getRestaurantId(),order.getOrderTime(), order.getExpectTime(), price, order.getFreight(), "Paid", order.getAddress());
 
 
        orderInfoMapper.insert(info);
+
+       //设置时区
 
        for (ProductVO item : list) {
            OrderProduct product = new OrderProduct(info.getOrderId(), item.getTitle(), order.getRestaurantId(), item.getQty(), item.getPrice(), item.getId());

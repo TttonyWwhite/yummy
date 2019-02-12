@@ -3,6 +3,7 @@ package pers.illiant.yummy.service;
 import org.springframework.stereotype.Service;
 import pers.illiant.yummy.entity.Address;
 import pers.illiant.yummy.entity.Member;
+import pers.illiant.yummy.model.MemberVO_login;
 import pers.illiant.yummy.model.MemberVO_post;
 import pers.illiant.yummy.util.Result;
 
@@ -10,7 +11,7 @@ import pers.illiant.yummy.util.Result;
 @Service("memberService")
 public interface MemberService {
 
-    boolean signin(String username, String password);
+    Result signin(MemberVO_login member);
 
     boolean signup(String name, String email, String password);
 
@@ -29,4 +30,9 @@ public interface MemberService {
     Result getAddress(int memberId);
 
     Result getMemberLevel(int memberId);
+
+    /**
+     * 用户注销
+     */
+    Result writeOff(int memberId);
 }

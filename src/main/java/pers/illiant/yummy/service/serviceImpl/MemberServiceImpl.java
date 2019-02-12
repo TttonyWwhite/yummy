@@ -1,5 +1,6 @@
 package pers.illiant.yummy.service.serviceImpl;
 
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pers.illiant.yummy.dao.AddressMapper;
@@ -7,13 +8,16 @@ import pers.illiant.yummy.dao.MemberMapper;
 import pers.illiant.yummy.dao.OrderInfoMapper;
 import pers.illiant.yummy.entity.Address;
 import pers.illiant.yummy.entity.Member;
+import pers.illiant.yummy.model.MemberVO_login;
 import pers.illiant.yummy.model.MemberVO_post;
 import pers.illiant.yummy.service.MemberService;
+import pers.illiant.yummy.util.AuthenticationCreater;
 import pers.illiant.yummy.util.MemberLevel;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
 
 import javax.swing.text.Style;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,16 +37,24 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.selectAll();
     }
 
+
     @Override
-    public boolean signin(String username, String password) {
-        Member member = memberMapper.selectByName(username);
-        if (member.getMemberPassword().equals(password)) {
-            System.out.println("password correct");
-            return true;
-        } else {
-            System.out.println("password wrong");
-            return false;
+    public Result signin(MemberVO_login member) {
+        Member memberInDatabase = memberMapper.selectByName(member.getName());
+        JSONObject jsonObject = new JSONObject();
+        if (memberInDatabase == null) {
+            return ResultUtils.error(11115, "用户不存在");
+        } else if ( !member.getPassword().equals(memberInDatabase.getMemberPassword())) {
+            return ResultUtils.error(11116, "密码错误");
+        } else if (!memberInDatabase.getActive()) {
+            return ResultUtils.error(11117, "用户已注销");
+        }  else {
+            String token = AuthenticationCreater.getToken(memberInDatabase);
+            jsonObject.put("token", token);
+            jsonObject.put("member", memberInDatabase );
         }
+
+        return ResultUtils.success(jsonObject);
     }
 
     @Override
@@ -151,6 +163,20 @@ public class MemberServiceImpl implements MemberService {
     public Result getMemberLevel(int memberId) {
         Member member = memberMapper.selectByPrimaryKey(memberId);
         return ResultUtils.success(member.getLevel());
+    }
+
+    @Override
+    public Result writeOff(int memberId) {
+       try {
+           Member member = memberMapper.selectByPrimaryKey(memberId);
+           member.setActive(false);
+           memberMapper.updateByPrimaryKey(member);
+       } catch (Exception e) {
+           e.printStackTrace();
+           return ResultUtils.error(11114, "用户注销失败");
+       }
+
+       return ResultUtils.success();
     }
 
 

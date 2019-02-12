@@ -1,14 +1,11 @@
 package pers.illiant.yummy.controller;
 
-import net.sf.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 import pers.illiant.yummy.entity.Address;
-import pers.illiant.yummy.entity.Member;
 import pers.illiant.yummy.model.MemberVO_login;
 import pers.illiant.yummy.model.MemberVO_post;
 import pers.illiant.yummy.model.MemberVO_signup;
-import pers.illiant.yummy.service.serviceImpl.AuthenticationService;
 import pers.illiant.yummy.service.serviceImpl.MemberServiceImpl;
 import pers.illiant.yummy.util.Result;
 
@@ -20,25 +17,9 @@ public class MemberController {
     @Resource
     private MemberServiceImpl memberService;
 
-    @Resource
-    AuthenticationService authenticationService;
-
     @RequestMapping("/login")
-    public Object login(@RequestBody MemberVO_login member) {
-
-        Member memberInDatabase = memberService.findByName(member.getName());
-        JSONObject jsonObject = new JSONObject();
-        if (memberInDatabase == null) {
-            jsonObject.put("message", "用户不存在");
-        } else if ( !member.getPassword().equals(memberInDatabase.getMemberPassword())) {
-            jsonObject.put("message", "密码错误");
-        } else {
-            String token = authenticationService.getToken(memberInDatabase);
-            jsonObject.put("token", token);
-            jsonObject.put("member", memberInDatabase );
-        }
-
-        return jsonObject;
+    public Result login(@RequestBody MemberVO_login member) {
+        return memberService.signin(member);
     }
 
     @RequestMapping("/signup")
@@ -77,5 +58,15 @@ public class MemberController {
     @RequestMapping("/getMemberLevel")
     public Result getMemberLevel(@RequestParam Integer memberId) {
         return memberService.getMemberLevel(memberId);
+    }
+
+    /**
+     * 用户注销api
+     * @param memberId 要注销的用户ID
+     * @return 注销操作结果
+     */
+    @RequestMapping("/writeOff")
+    public Result writeOff(@RequestParam Integer memberId) {
+        return memberService.writeOff(memberId);
     }
 }

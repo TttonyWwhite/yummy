@@ -2,9 +2,11 @@ package pers.illiant.yummy.service.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pers.illiant.yummy.dao.MemberMapper;
 import pers.illiant.yummy.dao.OrderInfoMapper;
 import pers.illiant.yummy.dao.OrderProductMapper;
 import pers.illiant.yummy.dao.RestaurantMapper;
+import pers.illiant.yummy.entity.Member;
 import pers.illiant.yummy.entity.OrderInfo;
 import pers.illiant.yummy.entity.OrderProduct;
 import pers.illiant.yummy.entity.Restaurant;
@@ -12,6 +14,7 @@ import pers.illiant.yummy.model.OrderVO;
 import pers.illiant.yummy.model.OrderVO_post;
 import pers.illiant.yummy.model.ProductVO;
 import pers.illiant.yummy.service.ShoppingService;
+import pers.illiant.yummy.util.MemberLevel;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
 
@@ -31,6 +34,9 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Autowired
     RestaurantMapper restaurantMapper;
 
+    @Autowired
+    MemberMapper memberMapper;
+
     @Override
     public Result orderFood(OrderVO order) {
        List<ProductVO> list = order.getItems();
@@ -47,12 +53,13 @@ public class ShoppingServiceImpl implements ShoppingService {
 
        orderInfoMapper.insert(info);
 
-       //设置时区
-
        for (ProductVO item : list) {
            OrderProduct product = new OrderProduct(info.getOrderId(), item.getTitle(), order.getRestaurantId(), item.getQty(), item.getPrice(), item.getId());
            orderProductMapper.insert(product);
        }
+
+       //更新用户级别(可能用户级别提升)
+       updateMemberLevel(order.getMemberId());
 
        return ResultUtils.success();
     }
@@ -83,5 +90,22 @@ public class ShoppingServiceImpl implements ShoppingService {
         }
 
         return ResultUtils.success(retList);
+    }
+
+    @Override
+    public void updateMemberLevel(int memberId) {
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        double totalConsumption = orderInfoMapper.getConsumption(memberId);
+        if (totalConsumption >= 5000) {
+            member.setLevel(MemberLevel.LEVEL_4);
+        } else if (totalConsumption >= 1000) {
+            member.setLevel(MemberLevel.LEVEL_3);
+        } else if (totalConsumption >= 100) {
+            member.setLevel(MemberLevel.LEVEL_2);
+        } else {
+            member.setLevel(MemberLevel.LEVLE_1);
+        }
+
+        memberMapper.updateByPrimaryKey(member);
     }
 }

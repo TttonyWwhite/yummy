@@ -52,4 +52,9 @@ public interface OrderInfoMapper {
      * @return 订单列表
      */
     List<OrderInfo> selectByMemberId(Integer memberId);
+
+    /**
+     * 获取用户的历史消费总额
+     */
+    Double getConsumption(Integer memberId);
 }

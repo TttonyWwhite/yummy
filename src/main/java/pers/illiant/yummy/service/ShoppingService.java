@@ -7,4 +7,6 @@ public interface ShoppingService {
     Result orderFood(OrderVO vo);
 
     Result getOrders(Integer memberId);
+
+    void updateMemberLevel(int memberId);
 }

@@ -84,4 +84,6 @@
       phoneNumber = #{phoneNumber,jdbcType=VARCHAR}
     where member_id = #{memberId,jdbcType=INTEGER}
   </update>
+
+
 </mapper>

@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pers.illiant.yummy.dao.AddressMapper;
 import pers.illiant.yummy.dao.MemberMapper;
+import pers.illiant.yummy.dao.OrderInfoMapper;
 import pers.illiant.yummy.entity.Address;
 import pers.illiant.yummy.entity.Member;
 import pers.illiant.yummy.model.MemberVO_post;
 import pers.illiant.yummy.service.MemberService;
+import pers.illiant.yummy.util.MemberLevel;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
 
@@ -23,6 +25,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private AddressMapper addressMapper;
+
+    @Autowired
+    private OrderInfoMapper orderInfoMapper;
 
     public List<Member> findAll() {
         return memberMapper.selectAll();

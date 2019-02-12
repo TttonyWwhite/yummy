@@ -80,4 +80,10 @@
     from order_info
     where member_id = #{memberId, jdbcType=INTEGER}
   </select>
+
+  <select id="getConsumption" resultType="java.lang.Double">
+    select sum(price)
+    from order_info
+    where member_id = #{memberId, jdbcType=INTEGER}
+  </select>
 </mapper>

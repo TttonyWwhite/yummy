@@ -2,7 +2,12 @@ package pers.illiant.yummy.service.serviceImpl;
 
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import pers.illiant.yummy.dao.AddressMapper;
 import pers.illiant.yummy.dao.MemberMapper;
 import pers.illiant.yummy.dao.OrderInfoMapper;
@@ -16,10 +21,14 @@ import pers.illiant.yummy.util.MemberLevel;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.swing.text.Style;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {
@@ -33,6 +42,17 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private OrderInfoMapper orderInfoMapper;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private TemplateEngine templateEngine;
+
+    @Value("${spring.mail.username}")
+    private String sender;
+
+    public static Map<Integer, Member> map = new HashMap<Integer, Member>();
+
     public List<Member> findAll() {
         return memberMapper.selectAll();
     }
@@ -43,11 +63,11 @@ public class MemberServiceImpl implements MemberService {
         Member memberInDatabase = memberMapper.selectByName(member.getName());
         JSONObject jsonObject = new JSONObject();
         if (memberInDatabase == null) {
-            return ResultUtils.error(11115, "用户不存在");
+            return ResultUtils.error(11111, "用户不存在");
         } else if ( !member.getPassword().equals(memberInDatabase.getMemberPassword())) {
-            return ResultUtils.error(11116, "密码错误");
+            return ResultUtils.error(11112, "密码错误");
         } else if (!memberInDatabase.getActive()) {
-            return ResultUtils.error(11117, "用户已注销");
+            return ResultUtils.error(11113, "用户已注销或未激活");
         }  else {
             String token = AuthenticationCreater.getToken(memberInDatabase);
             jsonObject.put("token", token);
@@ -59,20 +79,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean signup(String name, String email, String password) {
-
         Member member = new Member();
-        member.setEmail(email);
         member.setMemberName(name);
+        member.setEmail(email);
         member.setMemberPassword(password);
-
-        try {
-            memberMapper.insert(member);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        member.setActive(false);
+        memberMapper.insert(member);
+        map.put(member.getMemberId(), member);
+        sendTemplateMail(member.getEmail(), member.getMemberId());
+        return true;
     }
 
     @Override
@@ -103,7 +118,7 @@ public class MemberServiceImpl implements MemberService {
             addressMapper.updateByPrimaryKey(address);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultUtils.error(11111, "地址更新失败");
+            return ResultUtils.error(11114, "地址更新失败");
         }
 
         return ResultUtils.success();
@@ -119,7 +134,7 @@ public class MemberServiceImpl implements MemberService {
             memberMapper.modifyInfo(member);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultUtils.error(11112, "用户信息更新失败");
+            return ResultUtils.error(11115, "用户信息更新失败");
         }
 
         return ResultUtils.success();
@@ -131,7 +146,7 @@ public class MemberServiceImpl implements MemberService {
             addressMapper.insert(address);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultUtils.error(11113, "增加地址失败");
+            return ResultUtils.error(11116, "增加地址失败");
         }
 
         return ResultUtils.success();
@@ -145,7 +160,7 @@ public class MemberServiceImpl implements MemberService {
             list = addressMapper.selectByMemberId(memberId);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultUtils.error(11114, "查询地址失败");
+            return ResultUtils.error(11117, "查询地址失败");
         }
 
         //默认地址要放在地址列表的第一个
@@ -173,10 +188,42 @@ public class MemberServiceImpl implements MemberService {
            memberMapper.updateByPrimaryKey(member);
        } catch (Exception e) {
            e.printStackTrace();
-           return ResultUtils.error(11114, "用户注销失败");
+           return ResultUtils.error(11118, "用户注销失败");
        }
 
        return ResultUtils.success();
+    }
+
+    @Override
+    public boolean activation(int memberId) {
+        Member member = map.get(memberId);
+        if (member != null) {
+            member.setActive(true);
+            memberMapper.updateByPrimaryKey(member);
+            map.remove(member.getMemberId());
+            map.put(member.getMemberId(), member);
+
+            return true;
+        }
+        return false;
+    }
+
+    public void sendTemplateMail(String recipient, Integer memberId) {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(sender);
+            helper.setTo(recipient);
+            helper.setSubject("yummy激活邮件");
+            Context context = new Context();
+            context.setVariable("id", memberId);
+            String emailContent = templateEngine.process("emailTemplate", context);
+            helper.setText(emailContent, true);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        javaMailSender.send(message);
     }
 
 

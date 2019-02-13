@@ -1,7 +1,9 @@
 package pers.illiant.yummy.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
+import pers.illiant.yummy.dao.MemberMapper;
 import pers.illiant.yummy.entity.Address;
 import pers.illiant.yummy.model.MemberVO_login;
 import pers.illiant.yummy.model.MemberVO_post;
@@ -10,6 +12,11 @@ import pers.illiant.yummy.service.serviceImpl.MemberServiceImpl;
 import pers.illiant.yummy.util.Result;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+
+import pers.illiant.yummy.util.ResultUtils;
+
+import java.io.IOException;
 
 @RestController
 @EnableAutoConfiguration
@@ -23,9 +30,18 @@ public class MemberController {
     }
 
     @RequestMapping("/signup")
-    public boolean signup(@RequestBody MemberVO_signup member) {
-        System.out.println(member.getName());
-        return memberService.signup(member.getName(), member.getEmail(), member.getPassword());
+    public Result signup(@RequestBody MemberVO_signup member) {
+       if (memberService.signup(member.getName(), member.getEmail(), member.getPassword()))
+           return ResultUtils.success();
+       else
+           return ResultUtils.error(11117, "注册失败");
+    }
+
+    @RequestMapping(value = "activation/{memberId}", method = RequestMethod.GET)
+    public void activation(@PathVariable Integer memberId, HttpServletResponse response) throws IOException {
+        if (memberService.activation(memberId)) {
+            response.sendRedirect("http://127.0.0.1:9099/#/homepage/" + memberId);
+        }
     }
 
     @RequestMapping("/getMemberInfo")
@@ -69,4 +85,6 @@ public class MemberController {
     public Result writeOff(@RequestParam Integer memberId) {
         return memberService.writeOff(memberId);
     }
+
+
 }

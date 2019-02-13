@@ -67,7 +67,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             return ResultUtils.success();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultUtils.error(1, "fail to release food");
+            return ResultUtils.error(11119, "fail to release food");
         }
     }
 
@@ -75,11 +75,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Result login(String id, String password) {
         Restaurant restaurant = restaurantMapper.selectByPrimaryKey(id);
         if (restaurant == null)
-            return ResultUtils.error(3, "nonexistence");
+            return ResultUtils.error(11120, "nonexistence");
         if (restaurant.getPassword().equals(password))
             return ResultUtils.success();
         else
-            return ResultUtils.error(2, "Wrong Password");
+            return ResultUtils.error(11121, "Wrong Password");
     }
 
     @Override

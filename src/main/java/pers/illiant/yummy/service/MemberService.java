@@ -35,4 +35,11 @@ public interface MemberService {
      * 用户注销
      */
     Result writeOff(int memberId);
+
+    /**
+     * 用于验证此用户是否为已注册待激活用户
+     * @param memberId 用户id
+     */
+    boolean activation(int memberId);
+
 }

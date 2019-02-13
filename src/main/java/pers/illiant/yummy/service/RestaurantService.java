@@ -9,7 +9,7 @@ import pers.illiant.yummy.util.Result;
 import java.util.List;
 
 public interface RestaurantService {
-    boolean register(RestaurantVO_register restaurant);
+    Result register(RestaurantVO_register restaurant);
 
     List<RestaurantVO_post> getAll();
 

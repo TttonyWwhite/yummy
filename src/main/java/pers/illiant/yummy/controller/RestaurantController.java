@@ -26,7 +26,7 @@ public class RestaurantController {
     private FoodService foodService;
 
     @RequestMapping("/signupForRestaurant")
-    public boolean signupForRestaurant(@RequestBody RestaurantVO_register restaurant) {
+    public Result signupForRestaurant(@RequestBody RestaurantVO_register restaurant) {
         return restaurantService.register(restaurant);
     }
 

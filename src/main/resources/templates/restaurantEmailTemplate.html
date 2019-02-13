@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Yummy验证邮件</title>
+</head>
+<body>
+您好,这是注册成功邮件，以下是您餐厅后台系统的登陆码。
+<!--/*@thymesVar id="restaurantId" type="java.lang.String"*/-->
+<p th:text="${restaurantId}"></p>
+</body>
+</html>

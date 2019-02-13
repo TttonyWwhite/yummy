@@ -16,15 +16,10 @@ import pers.illiant.yummy.entity.Member;
 import pers.illiant.yummy.model.MemberVO_login;
 import pers.illiant.yummy.model.MemberVO_post;
 import pers.illiant.yummy.service.MemberService;
-import pers.illiant.yummy.util.AuthenticationCreater;
-import pers.illiant.yummy.util.MemberLevel;
-import pers.illiant.yummy.util.Result;
-import pers.illiant.yummy.util.ResultUtils;
+import pers.illiant.yummy.util.*;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.swing.text.Style;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -208,6 +203,7 @@ public class MemberServiceImpl implements MemberService {
         return false;
     }
 
+
     public void sendTemplateMail(String recipient, Integer memberId) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
@@ -225,6 +221,5 @@ public class MemberServiceImpl implements MemberService {
 
         javaMailSender.send(message);
     }
-
 
 }

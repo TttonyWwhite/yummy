@@ -8,11 +8,12 @@ public class RestaurantVO_register {
     private String imgUrl;
     private String shopName;
     private String password;
+    private String email;
 
     public RestaurantVO_register() {
     }
 
-    public RestaurantVO_register(String lng_lat, String address, String type, String phoneNumber, String imgUrl, String shopName, String password) {
+    public RestaurantVO_register(String lng_lat, String address, String type, String phoneNumber, String imgUrl, String shopName, String password, String email) {
         this.lng_lat = lng_lat;
         this.address = address;
         this.type = type;
@@ -20,6 +21,7 @@ public class RestaurantVO_register {
         this.imgUrl = imgUrl;
         this.shopName = shopName;
         this.password = password;
+        this.email = email;
     }
 
     public String getLng_lat() {
@@ -76,5 +78,13 @@ public class RestaurantVO_register {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import pers.illiant.yummy.dao.FoodMapper;
+import pers.illiant.yummy.dao.OrderInfoMapper;
+import pers.illiant.yummy.dao.OrderProductMapper;
 import pers.illiant.yummy.dao.RestaurantMapper;
 import pers.illiant.yummy.entity.Food;
+import pers.illiant.yummy.entity.OrderInfo;
+import pers.illiant.yummy.entity.OrderProduct;
 import pers.illiant.yummy.entity.Restaurant;
-import pers.illiant.yummy.model.FoodVO_release;
-import pers.illiant.yummy.model.RestaurantVO_post;
-import pers.illiant.yummy.model.RestaurantVO_register;
+import pers.illiant.yummy.model.*;
 import pers.illiant.yummy.service.RestaurantService;
 import pers.illiant.yummy.util.IDCreater;
 import pers.illiant.yummy.util.MailSender;
@@ -22,6 +24,7 @@ import pers.illiant.yummy.util.ResultUtils;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,12 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     FoodMapper foodMapper;
+
+    @Autowired
+    OrderInfoMapper orderInfoMapper;
+
+    @Autowired
+    OrderProductMapper orderProductMapper;
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -103,6 +112,37 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Restaurant findById(String id) {
         return restaurantMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Result getOrders(String id) {
+        List<OrderVO_restaurant> list = new ArrayList<>();
+        List<OrderInfo> orderInfos = orderInfoMapper.selectByRestaurantId(id);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (OrderInfo item : orderInfos) {
+            List<OrderProduct> products = orderProductMapper.selectByOrderId(item.getOrderId());
+            String content = "";
+            if (products.size() == 1) {
+                content = products.get(0).getFoodName();
+            } else if (products.size() == 2) {
+                content = products.get(0).getFoodName() + "/" + products.get(1).getFoodName();
+            } else if (products.size() > 2) {
+                content = products.get(0).getFoodName() + "/" + products.get(1).getFoodName() + "等" + products.size() + "件商品";
+            }
+
+            OrderVO_restaurant vo = new OrderVO_restaurant();
+            vo.setOrderId(item.getOrderId());
+            vo.setPrice(item.getPrice());
+            vo.setTime(formatter.format(item.getOrderTime()));
+            //vo.setState(item.getState());
+            if (item.getState().equals("Paid")) {
+                vo.setState("订单已提交");
+            }
+
+            vo.setContent(content);
+            list.add(vo);
+        }
+        return ResultUtils.success(list);
     }
 
     public void sendRestaurantMail(String recipient, String restaurantId) {

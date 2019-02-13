@@ -66,4 +66,9 @@ public class RestaurantController {
         RestaurantVO_post vo = new RestaurantVO_post(restaurant);
         return ResultUtils.success(vo);
     }
+
+    @RequestMapping("/restaurant/getOrders")
+    public Result getOrders(@RequestParam String restaurantId) {
+        return restaurantService.getOrders(restaurantId);
+    }
 }

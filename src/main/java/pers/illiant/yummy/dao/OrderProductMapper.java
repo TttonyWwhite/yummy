@@ -47,4 +47,6 @@ public interface OrderProductMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(OrderProduct record);
+
+    List<OrderProduct> selectByOrderId(Integer orderId);
 }

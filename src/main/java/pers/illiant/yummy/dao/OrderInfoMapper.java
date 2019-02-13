@@ -57,4 +57,6 @@ public interface OrderInfoMapper {
      * 获取用户的历史消费总额
      */
     Double getConsumption(Integer memberId);
+
+    List<OrderInfo> selectByRestaurantId(String restaurantId);
 }

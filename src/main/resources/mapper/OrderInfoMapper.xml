@@ -86,4 +86,10 @@
     from order_info
     where member_id = #{memberId, jdbcType=INTEGER}
   </select>
+
+  <select id="selectByRestaurantId" resultMap="BaseResultMap">
+    select order_id, member_id, restaurant_id, order_time, expect_time, price, freight, `state`
+    from order_info
+    where restaurant_id = #{restaurantId, jdbcType=VARCHAR}
+  </select>
 </mapper>

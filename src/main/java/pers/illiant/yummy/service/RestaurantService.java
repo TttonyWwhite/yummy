@@ -18,4 +18,6 @@ public interface RestaurantService {
     Result login(String id, String password);
 
     Restaurant findById(String id);
+
+    Result getOrders(String id);
 }

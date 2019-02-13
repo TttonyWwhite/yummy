@@ -66,4 +66,10 @@
     select order_id, food_name, restaurant_id, food_quantity, food_price, food_id
     from order_product
   </select>
+
+  <select id="selectByOrderId" resultMap="BaseResultMap">
+    select order_id, food_name, restaurant_id, food_quantity, food_price, food_id
+    from order_product
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
 </mapper>

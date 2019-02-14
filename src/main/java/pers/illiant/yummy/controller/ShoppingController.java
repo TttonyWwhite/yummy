@@ -33,4 +33,9 @@ public class ShoppingController {
 
         return shoppingService.getOrders(memberId);
     }
+
+    @RequestMapping("/getOrderDetail")
+    public Result getOrderDetail(@RequestParam Integer orderId) {
+        return shoppingService.getOrderDetail(orderId);
+    }
 }

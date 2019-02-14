@@ -2,14 +2,9 @@ package pers.illiant.yummy.service.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pers.illiant.yummy.dao.MemberMapper;
-import pers.illiant.yummy.dao.OrderInfoMapper;
-import pers.illiant.yummy.dao.OrderProductMapper;
-import pers.illiant.yummy.dao.RestaurantMapper;
-import pers.illiant.yummy.entity.Member;
-import pers.illiant.yummy.entity.OrderInfo;
-import pers.illiant.yummy.entity.OrderProduct;
-import pers.illiant.yummy.entity.Restaurant;
+import pers.illiant.yummy.dao.*;
+import pers.illiant.yummy.entity.*;
+import pers.illiant.yummy.model.OrderDetailVO;
 import pers.illiant.yummy.model.OrderVO;
 import pers.illiant.yummy.model.OrderVO_post;
 import pers.illiant.yummy.model.ProductVO;
@@ -37,6 +32,9 @@ public class ShoppingServiceImpl implements ShoppingService {
 
     @Autowired
     MemberMapper memberMapper;
+
+    @Autowired
+    AddressMapper addressMapper;
 
     @Override
     public Result orderFood(OrderVO order) {
@@ -120,5 +118,33 @@ public class ShoppingServiceImpl implements ShoppingService {
         }
 
         memberMapper.updateByPrimaryKey(member);
+    }
+
+    @Override
+    public Result getOrderDetail(int orderId) {
+        OrderDetailVO detail = new OrderDetailVO();
+        OrderInfo orderInfo = orderInfoMapper.selectByPrimaryKey(orderId);
+        Address address = addressMapper.selectByPrimaryKey(orderInfo.getAddressId());
+        Member member = memberMapper.selectByPrimaryKey(orderInfo.getMemberId());
+        Restaurant restaurant = restaurantMapper.selectByPrimaryKey(orderInfo.getRestaurantId());
+
+        List<OrderProduct> products = orderProductMapper.selectByOrderId(orderId);
+        List<ProductVO> voList = new ArrayList<>();
+
+        detail.setAddress(address.getAddress());
+        detail.setContactName(address.getContactName());
+        detail.setFreight(orderInfo.getFreight());
+        detail.setPhoneNumber(address.getPhoneNumber());
+        detail.setImageUrl(restaurant.getImgurl());
+        detail.setShopName(restaurant.getShopName());
+        detail.setState(orderInfo.getState());
+
+        for (OrderProduct item : products) {
+            voList.add(new ProductVO(item));
+        }
+
+        detail.setProducts(voList);
+
+        return ResultUtils.success(detail);
     }
 }

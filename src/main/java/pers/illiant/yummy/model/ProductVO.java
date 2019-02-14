@@ -1,5 +1,7 @@
 package pers.illiant.yummy.model;
 
+import pers.illiant.yummy.entity.OrderProduct;
+
 public class ProductVO {
     private int id;
     private String title;
@@ -16,6 +18,14 @@ public class ProductVO {
         this.price = price;
         this.image = image;
         this.qty = qty;
+    }
+
+    public ProductVO(OrderProduct product) {
+        this.id = product.getFoodId();
+        this.title = product.getFoodName();
+        this.price = product.getFoodPrice();
+        this.qty = product.getFoodQuantity();
+        this.image = "";
     }
 
     public int getId() {

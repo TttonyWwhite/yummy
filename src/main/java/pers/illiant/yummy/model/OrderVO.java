@@ -12,20 +12,20 @@ public class OrderVO {
     private Date orderTime;
     private Date expectTime;
     private double freight; //运费
-    private int address;
+    private int addressId;
 
 
     public OrderVO() {
     }
 
-    public OrderVO(List<ProductVO> items, String restaurantId, int memberId, Date orderTime, Date expectTime, double freight, int address) {
+    public OrderVO(List<ProductVO> items, String restaurantId, int memberId, Date orderTime, Date expectTime, double freight, int addressId) {
         this.items = items;
         this.restaurantId = restaurantId;
         this.memberId = memberId;
         this.orderTime = orderTime;
         this.expectTime = expectTime;
         this.freight = freight;
-        this.address = address;
+        this.addressId = addressId;
     }
 
 
@@ -86,10 +86,10 @@ public class OrderVO {
     }
 
     public int getAddress() {
-        return address;
+        return addressId;
     }
 
-    public void setAddress(int address) {
-        this.address = address;
+    public void setAddress(int addressId) {
+        this.addressId = addressId;
     }
 }

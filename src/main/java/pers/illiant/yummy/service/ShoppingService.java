@@ -9,4 +9,6 @@ public interface ShoppingService {
     Result getOrders(Integer memberId);
 
     void updateMemberLevel(int memberId);
+
+    Result getOrderDetail(int orderId);
 }

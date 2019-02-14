@@ -147,4 +147,13 @@ public class ShoppingServiceImpl implements ShoppingService {
 
         return ResultUtils.success(detail);
     }
+
+    @Override
+    public Result confirm(int orderId) {
+        OrderInfo info = orderInfoMapper.selectByPrimaryKey(orderId);
+        info.setState("Arrived"); //已送达
+        orderInfoMapper.updateByPrimaryKey(info);
+
+        return ResultUtils.success();
+    }
 }

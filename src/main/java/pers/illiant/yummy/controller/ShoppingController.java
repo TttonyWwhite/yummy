@@ -38,4 +38,14 @@ public class ShoppingController {
     public Result getOrderDetail(@RequestParam Integer orderId) {
         return shoppingService.getOrderDetail(orderId);
     }
+
+    /**
+     * 确认收货api
+     * @param orderId 订单编号
+     * @return 操作结果
+     */
+    @RequestMapping("/confirm")
+    public Result confirm(@RequestParam Integer orderId) {
+        return shoppingService.confirm(orderId);
+    }
 }

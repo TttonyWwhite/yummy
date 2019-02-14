@@ -11,4 +11,7 @@ public interface ShoppingService {
     void updateMemberLevel(int memberId);
 
     Result getOrderDetail(int orderId);
+
+    Result confirm(int orderId);
+
 }

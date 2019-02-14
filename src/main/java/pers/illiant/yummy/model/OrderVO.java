@@ -12,13 +12,13 @@ public class OrderVO {
     private Date orderTime;
     private Date expectTime;
     private double freight; //运费
-    private String address;
+    private int address;
 
 
     public OrderVO() {
     }
 
-    public OrderVO(List<ProductVO> items, String restaurantId, int memberId, Date orderTime, Date expectTime, double freight, String address) {
+    public OrderVO(List<ProductVO> items, String restaurantId, int memberId, Date orderTime, Date expectTime, double freight, int address) {
         this.items = items;
         this.restaurantId = restaurantId;
         this.memberId = memberId;
@@ -85,11 +85,11 @@ public class OrderVO {
         this.freight = freight;
     }
 
-    public String getAddress() {
+    public int getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(int address) {
         this.address = address;
     }
 }

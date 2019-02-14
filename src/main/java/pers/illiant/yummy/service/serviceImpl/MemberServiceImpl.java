@@ -13,6 +13,7 @@ import pers.illiant.yummy.dao.MemberMapper;
 import pers.illiant.yummy.dao.OrderInfoMapper;
 import pers.illiant.yummy.entity.Address;
 import pers.illiant.yummy.entity.Member;
+import pers.illiant.yummy.model.AddressVO;
 import pers.illiant.yummy.model.MemberVO_login;
 import pers.illiant.yummy.model.MemberVO_post;
 import pers.illiant.yummy.service.MemberService;
@@ -159,14 +160,15 @@ public class MemberServiceImpl implements MemberService {
         }
 
         //默认地址要放在地址列表的第一个
-        List<String> strList = new ArrayList<>();
-        strList.add(member.getDefaultAddress());
+        List<AddressVO> retList = new ArrayList<>();
         for (Address item : list) {
-            if (!item.getAddress().equals(member.getDefaultAddress())) //不要重复添加默认地址
-                strList.add(item.getAddress());
+            AddressVO vo = new AddressVO();
+            vo.setAddress(item.getAddress());
+            vo.setAddressId(item.getAddressId());
+            retList.add(vo);
         }
 
-        return ResultUtils.success(strList);
+        return ResultUtils.success(retList);
     }
 
     @Override

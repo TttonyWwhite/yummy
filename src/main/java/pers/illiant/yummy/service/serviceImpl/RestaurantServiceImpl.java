@@ -151,7 +151,16 @@ public class RestaurantServiceImpl implements RestaurantService {
         return ResultUtils.success(list);
     }
 
-    public void sendRestaurantMail(String recipient, String restaurantId) {
+    @Override
+    public Result acceptOrder(int orderId) {
+        OrderInfo info = orderInfoMapper.selectByPrimaryKey(orderId);
+        info.setState("Accepted");
+        orderInfoMapper.updateByPrimaryKey(info);
+
+        return ResultUtils.success();
+    }
+
+    private void sendRestaurantMail(String recipient, String restaurantId) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -168,4 +177,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         javaMailSender.send(message);
     }
+
+
 }

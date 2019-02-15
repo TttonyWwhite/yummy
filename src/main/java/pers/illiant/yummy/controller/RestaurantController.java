@@ -71,4 +71,9 @@ public class RestaurantController {
     public Result getOrders(@RequestParam String restaurantId) {
         return restaurantService.getOrders(restaurantId);
     }
+
+    @RequestMapping("/acceptOrder")
+    public Result acceptOrder(@RequestParam Integer orderId) {
+        return restaurantService.acceptOrder(orderId);
+    }
 }

@@ -20,4 +20,6 @@ public interface RestaurantService {
     Restaurant findById(String id);
 
     Result getOrders(String id);
+
+    Result acceptOrder(int orderId);
 }

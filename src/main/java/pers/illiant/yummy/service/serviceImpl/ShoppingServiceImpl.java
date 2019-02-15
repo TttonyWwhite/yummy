@@ -145,6 +145,16 @@ public class ShoppingServiceImpl implements ShoppingService {
 
         detail.setProducts(voList);
 
+        double discount = 1;
+        if (member.getLevel() == 2)
+            discount = 0.95;
+        else if (member.getLevel() == 3)
+            discount = 0.92;
+        else if (member.getLevel() == 4)
+            discount = 0.85;
+
+        detail.setDiscount(discount);
+
         return ResultUtils.success(detail);
     }
 

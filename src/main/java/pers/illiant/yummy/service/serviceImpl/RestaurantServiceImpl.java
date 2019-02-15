@@ -137,6 +137,12 @@ public class RestaurantServiceImpl implements RestaurantService {
             //vo.setState(item.getState());
             if (item.getState().equals("Paid")) {
                 vo.setState("订单已提交");
+            } else if (item.getState().equals("Accepted")) {
+                vo.setState("商家已接单");
+            } else if (item.getState().equals("Arrived")) {
+                vo.setState("已送达");
+            } else if (item.getState().equals("NotPaid")) {
+                vo.setState("待付款");
             }
 
             vo.setContent(content);

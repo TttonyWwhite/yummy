@@ -12,6 +12,7 @@ public class OrderDetailVO  {
     private String contactName; //联系人
     private String phoneNumber; //联系电话
     private String address; //收货地址
+    private double discount; //折扣
 
 
     public OrderDetailVO() {
@@ -79,5 +80,13 @@ public class OrderDetailVO  {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 }

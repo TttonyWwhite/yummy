@@ -13,6 +13,7 @@ import pers.illiant.yummy.util.ResultUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Timer;
 
 @RestController
 @EnableAutoConfiguration
@@ -25,6 +26,7 @@ public class ShoppingController {
     public Result orderFoods(@RequestBody OrderVO order) {
         //将ordervo中属于info表的存到info表中，product部分存到product表中
         shoppingService.orderFood(order);
+
         return ResultUtils.success();
     }
 
@@ -47,5 +49,10 @@ public class ShoppingController {
     @RequestMapping("/confirm")
     public Result confirm(@RequestParam Integer orderId) {
         return shoppingService.confirm(orderId);
+    }
+
+    @RequestMapping("/payForOrder")
+    public Result payForOrder(@RequestParam Integer orderId) {
+        return shoppingService.payForOrder(orderId);
     }
 }

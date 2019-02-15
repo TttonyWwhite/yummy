@@ -9,6 +9,7 @@ import pers.illiant.yummy.model.OrderVO;
 import pers.illiant.yummy.model.OrderVO_post;
 import pers.illiant.yummy.model.ProductVO;
 import pers.illiant.yummy.service.ShoppingService;
+import pers.illiant.yummy.util.CancelTimeTask;
 import pers.illiant.yummy.util.MemberLevel;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
@@ -17,6 +18,11 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @Service("shoppingService")
 public class ShoppingServiceImpl implements ShoppingService {
@@ -35,6 +41,8 @@ public class ShoppingServiceImpl implements ShoppingService {
 
     @Autowired
     AddressMapper addressMapper;
+
+    private static final int FIFTEENMINS = 10000;
 
     @Override
     public Result orderFood(OrderVO order) {
@@ -58,8 +66,8 @@ public class ShoppingServiceImpl implements ShoppingService {
 
 
        OrderInfo info = new OrderInfo();
-        //此时订单状态为paid
-       info = new OrderInfo(order.getMemberId(), order.getRestaurantId(),order.getOrderTime(), order.getExpectTime(), price, order.getFreight(), "Paid", order.getAddress());
+        //此时订单状态为NotPaid
+       info = new OrderInfo(order.getMemberId(), order.getRestaurantId(),order.getOrderTime(), order.getExpectTime(), price, order.getFreight(), "NotPaid", order.getAddress());
 
 
        orderInfoMapper.insert(info);
@@ -71,6 +79,9 @@ public class ShoppingServiceImpl implements ShoppingService {
 
        //更新用户级别(可能用户级别提升)
        updateMemberLevel(order.getMemberId());
+
+       Timer timer = new Timer();
+       timer.schedule(new CancelTimeTask(orderInfoMapper, info.getOrderId()), FIFTEENMINS);
 
        return ResultUtils.success();
     }
@@ -89,11 +100,13 @@ public class ShoppingServiceImpl implements ShoppingService {
             if (item.getState().equals("NotPaid")) {
                 state = "待付款";
             }else if (item.getState().equals("Paid")) {
-                state = "已付款，待派送";
-            } else if (item.getState().equals("Transporting")) {
-                state = "派送中";
-            } else if (item.getState().equals("Finished")) {
-                state = "已完成";
+                state = "订单已提交";
+            } else if (item.getState().equals("Accepted")) {
+                state = "商家已接单";
+            } else if (item.getState().equals("Arrived")) {
+                state = "已送达";
+            } else if (item.getState().equals("Canceled")) {
+                state = "支付超时";
             }
 
             OrderVO_post vo = new OrderVO_post(item.getOrderId(), restaurant.getImgurl(), restaurant.getShopName(), formatter.format(item.getOrderTime()), item.getPrice(), state);
@@ -162,6 +175,15 @@ public class ShoppingServiceImpl implements ShoppingService {
     public Result confirm(int orderId) {
         OrderInfo info = orderInfoMapper.selectByPrimaryKey(orderId);
         info.setState("Arrived"); //已送达
+        orderInfoMapper.updateByPrimaryKey(info);
+
+        return ResultUtils.success();
+    }
+
+    @Override
+    public Result payForOrder(int orderId) {
+        OrderInfo info = orderInfoMapper.selectByPrimaryKey(orderId);
+        info.setState("Paid");
         orderInfoMapper.updateByPrimaryKey(info);
 
         return ResultUtils.success();

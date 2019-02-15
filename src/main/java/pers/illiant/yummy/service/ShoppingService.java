@@ -13,4 +13,6 @@ public interface ShoppingService {
     Result getOrderDetail(int orderId);
 
     Result confirm(int orderId);
+
+    Result payForOrder(int orderId);
 }

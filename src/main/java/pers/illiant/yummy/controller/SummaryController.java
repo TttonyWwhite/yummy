@@ -19,4 +19,9 @@ public class SummaryController {
     public Result getRestaurantSummary() {
         return summaryService.restaurantPositionSummary();
     }
+
+    @RequestMapping("/getRestaurantClassSummary")
+    public Result getRestaurantClassSummary() {
+        return summaryService.restaurantClassSummary();
+    }
 }

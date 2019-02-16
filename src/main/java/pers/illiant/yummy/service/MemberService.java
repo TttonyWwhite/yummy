@@ -27,6 +27,8 @@ public interface MemberService {
 
     Result addAddress(Address address);
 
+    Result deleteAddress(int addressId);
+
     Result getAddress(int memberId);
 
     Result getMemberLevel(int memberId);

@@ -149,6 +149,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Result deleteAddress(int addressId) {
+        try {
+            addressMapper.deleteByPrimaryKey(addressId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.error(11123, "删除地址失败");
+        }
+
+        return ResultUtils.success();
+    }
+
+    @Override
     public Result getAddress(int memberId) {
         List<Address> list = new ArrayList<>();
         Member member = memberMapper.selectByPrimaryKey(memberId);

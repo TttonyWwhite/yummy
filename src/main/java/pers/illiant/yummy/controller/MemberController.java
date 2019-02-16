@@ -65,6 +65,11 @@ public class MemberController {
         return memberService.addAddress(address);
     }
 
+    @RequestMapping("/deleteAddress")
+    public Result deleteAddress(@RequestParam Integer addressId) {
+        return memberService.deleteAddress(addressId);
+    }
+
     @RequestMapping("/getAddress")
     public Result getAddress(@RequestParam Integer memberId) {
 

@@ -25,9 +25,7 @@ public class ShoppingController {
     @RequestMapping("/orderFoods")
     public Result orderFoods(@RequestBody OrderVO order) {
         //将ordervo中属于info表的存到info表中，product部分存到product表中
-        shoppingService.orderFood(order);
-
-        return ResultUtils.success();
+        return shoppingService.orderFood(order);
     }
 
     @RequestMapping("/getOrders")

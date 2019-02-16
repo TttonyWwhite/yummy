@@ -85,11 +85,11 @@ public class OrderVO {
         this.freight = freight;
     }
 
-    public int getAddress() {
+    public int getAddressId() {
         return addressId;
     }
 
-    public void setAddress(int addressId) {
+    public void setAddressId(int addressId) {
         this.addressId = addressId;
     }
 }

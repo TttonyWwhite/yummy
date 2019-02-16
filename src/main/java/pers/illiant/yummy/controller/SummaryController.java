@@ -24,4 +24,14 @@ public class SummaryController {
     public Result getRestaurantClassSummary() {
         return summaryService.restaurantClassSummary();
     }
+
+    @RequestMapping("/getMemberPositionSummary")
+    public Result getMemberPositionSummary() {
+        return summaryService.memberPositionSummary();
+    }
+
+    @RequestMapping("/getMemberLevelSummary")
+    public Result getMemberLevelSummary() {
+        return summaryService.memberLevelSummary();
+    }
 }

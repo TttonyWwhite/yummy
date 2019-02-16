@@ -9,20 +9,13 @@ import pers.illiant.yummy.model.OrderVO;
 import pers.illiant.yummy.model.OrderVO_post;
 import pers.illiant.yummy.model.ProductVO;
 import pers.illiant.yummy.service.ShoppingService;
-import pers.illiant.yummy.util.CancelTimeTask;
-import pers.illiant.yummy.util.MemberLevel;
-import pers.illiant.yummy.util.Result;
-import pers.illiant.yummy.util.ResultUtils;
+import pers.illiant.yummy.util.*;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @Service("shoppingService")
 public class ShoppingServiceImpl implements ShoppingService {
@@ -42,48 +35,65 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Autowired
     AddressMapper addressMapper;
 
-    private static final int FIFTEENMINS = 10000;
+    private static final int FIFTEENMINS = 900000;
 
     @Override
     public Result orderFood(OrderVO order) {
-       List<ProductVO> list = order.getItems();
-       double price = 0;
-       for (ProductVO item : list) {
-           price += item.getPrice() * item.getQty();
+
+       Address address = addressMapper.selectByPrimaryKey(order.getAddressId());
+       Restaurant restaurant = restaurantMapper.selectByPrimaryKey(order.getRestaurantId());
+
+       if (getDistance(address, restaurant) > 10000) {
+           return ResultUtils.error(11124, "超出配送距离");
+       } else {
+
+           List<ProductVO> list = order.getItems();
+           double price = 0;
+           for (ProductVO item : list) {
+               price += item.getPrice() * item.getQty();
+           }
+
+           //根据用户级别进行打折
+           DecimalFormat df = new DecimalFormat("0.00");
+           Member member = memberMapper.selectByPrimaryKey(order.getMemberId());
+           if (member.getLevel() == 4) {
+               price *= 0.85;
+           } else if (member.getLevel() == 3) {
+               price *= 0.92;
+           } else if (member.getLevel() == 2) {
+               price *= 0.95;
+           }
+           price = Double.parseDouble(df.format(price));
+
+
+           OrderInfo info = new OrderInfo();
+           //此时订单状态为NotPaid
+           double freight = 0;
+           double distance = getDistance(address, restaurant);
+           if (distance < 1000)
+               freight = 2;
+           else if (distance < 3000)
+               freight = 5;
+           else if (distance < 10000)
+               freight = 8;
+
+           info = new OrderInfo(order.getMemberId(), order.getRestaurantId(), order.getOrderTime(), order.getExpectTime(), price, freight, "NotPaid", order.getAddressId());
+
+           orderInfoMapper.insert(info);
+
+           for (ProductVO item : list) {
+               OrderProduct product = new OrderProduct(info.getOrderId(), item.getTitle(), order.getRestaurantId(), item.getQty(), item.getPrice(), item.getId());
+               orderProductMapper.insert(product);
+           }
+
+           //更新用户级别(可能用户级别提升)
+           updateMemberLevel(order.getMemberId());
+
+           Timer timer = new Timer();
+           timer.schedule(new CancelTimeTask(orderInfoMapper, info.getOrderId()), FIFTEENMINS);
+
+           return ResultUtils.success();
        }
-
-        //根据用户级别进行打折
-       DecimalFormat df = new DecimalFormat("0.00");
-       Member member = memberMapper.selectByPrimaryKey(order.getMemberId());
-       if (member.getLevel() == 4) {
-           price *= 0.85;
-       } else if (member.getLevel() == 3) {
-           price *= 0.92;
-       } else if (member.getLevel() == 2) {
-           price *= 0.95;
-       }
-       price = Double.parseDouble(df.format(price));
-
-
-       OrderInfo info = new OrderInfo();
-        //此时订单状态为NotPaid
-       info = new OrderInfo(order.getMemberId(), order.getRestaurantId(),order.getOrderTime(), order.getExpectTime(), price, order.getFreight(), "NotPaid", order.getAddress());
-
-
-       orderInfoMapper.insert(info);
-
-       for (ProductVO item : list) {
-           OrderProduct product = new OrderProduct(info.getOrderId(), item.getTitle(), order.getRestaurantId(), item.getQty(), item.getPrice(), item.getId());
-           orderProductMapper.insert(product);
-       }
-
-       //更新用户级别(可能用户级别提升)
-       updateMemberLevel(order.getMemberId());
-
-       Timer timer = new Timer();
-       timer.schedule(new CancelTimeTask(orderInfoMapper, info.getOrderId()), FIFTEENMINS);
-
-       return ResultUtils.success();
     }
 
     @Override
@@ -187,6 +197,17 @@ public class ShoppingServiceImpl implements ShoppingService {
         orderInfoMapper.updateByPrimaryKey(info);
 
         return ResultUtils.success();
+    }
+
+    private double getDistance(Address address, Restaurant restaurant) {
+        String[] strs = restaurant.getLngLat().split(",");
+        double lng2 = Double.parseDouble(strs[0]);
+        double lat2 = Double.parseDouble(strs[1]);
+
+
+        double distance = DistanceCalculator.getDistance(address.getLat(), address.getLng(), lat2, lng2);
+//        return !(distance > 10000);
+        return distance;
     }
 
 }

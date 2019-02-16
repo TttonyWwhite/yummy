@@ -53,4 +53,9 @@ public class ShoppingController {
     public Result payForOrder(@RequestParam Integer orderId) {
         return shoppingService.payForOrder(orderId);
     }
+
+    @RequestMapping("refund")
+    public Result refund(@RequestParam Integer orderId) {
+        return shoppingService.refund(orderId);
+    }
 }

@@ -53,9 +53,19 @@ public class ShoppingServiceImpl implements ShoppingService {
                price += item.getPrice() * item.getQty();
            }
 
+           Member member = memberMapper.selectByPrimaryKey(order.getMemberId());
+           double freight = 0;
+           double distance = getDistance(address, restaurant);
+           if (distance < 1000)
+               freight = 2;
+           else if (distance < 3000)
+               freight = 5;
+           else if (distance < 10000)
+               freight = 8;
+
+
            //根据用户级别进行打折
            DecimalFormat df = new DecimalFormat("0.00");
-           Member member = memberMapper.selectByPrimaryKey(order.getMemberId());
            if (member.getLevel() == 4) {
                price *= 0.85;
            } else if (member.getLevel() == 3) {
@@ -68,14 +78,7 @@ public class ShoppingServiceImpl implements ShoppingService {
 
            OrderInfo info = new OrderInfo();
            //此时订单状态为NotPaid
-           double freight = 0;
-           double distance = getDistance(address, restaurant);
-           if (distance < 1000)
-               freight = 2;
-           else if (distance < 3000)
-               freight = 5;
-           else if (distance < 10000)
-               freight = 8;
+
 
            info = new OrderInfo(order.getMemberId(), order.getRestaurantId(), order.getOrderTime(), order.getExpectTime(), price, freight, "NotPaid", order.getAddressId());
 
@@ -117,6 +120,8 @@ public class ShoppingServiceImpl implements ShoppingService {
                 state = "已送达";
             } else if (item.getState().equals("Canceled")) {
                 state = "支付超时";
+            } else if (item.getState().equals("Refund")) {
+                state = "已退款";
             }
 
             OrderVO_post vo = new OrderVO_post(item.getOrderId(), restaurant.getImgurl(), restaurant.getShopName(), formatter.format(item.getOrderTime()), item.getPrice(), state);
@@ -193,7 +198,35 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Override
     public Result payForOrder(int orderId) {
         OrderInfo info = orderInfoMapper.selectByPrimaryKey(orderId);
+        Member member = memberMapper.selectByPrimaryKey(info.getMemberId());
+        if (member.getBalance() < info.getPrice() + info.getFreight()) {
+            return ResultUtils.error(11125, "余额不足");
+        }
+
+        double new_balance = member.getBalance() - info.getFreight();
+        new_balance -= info.getPrice();
+        member.setBalance(new_balance);
+        memberMapper.updateByPrimaryKey(member);
         info.setState("Paid");
+        orderInfoMapper.updateByPrimaryKey(info);
+
+        return ResultUtils.success();
+    }
+
+    @Override
+    public Result refund(int orderId) {
+        OrderInfo info = orderInfoMapper.selectByPrimaryKey(orderId);
+        Member member = memberMapper.selectByPrimaryKey(info.getMemberId());
+        DecimalFormat df = new DecimalFormat("0.00");
+        double balance = member.getBalance();
+        double total = info.getFreight() + info.getPrice();
+
+        balance += Double.parseDouble(df.format(total * 0.8));
+        balance = Double.parseDouble(df.format(balance));
+
+        member.setBalance(balance);
+        memberMapper.updateByPrimaryKey(member);
+        info.setState("Refund");
         orderInfoMapper.updateByPrimaryKey(info);
 
         return ResultUtils.success();

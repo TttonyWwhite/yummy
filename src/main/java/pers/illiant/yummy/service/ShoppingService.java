@@ -15,4 +15,7 @@ public interface ShoppingService {
     Result confirm(int orderId);
 
     Result payForOrder(int orderId);
+
+    //退款
+    Result refund(int orderId);
 }

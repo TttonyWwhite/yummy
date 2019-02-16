@@ -145,6 +145,8 @@ public class RestaurantServiceImpl implements RestaurantService {
                 vo.setState("待付款");
             } else if (item.getState().equals("Canceled")) {
                 vo.setState("支付超时");
+            } else if (item.getState().equals("Refund")) {
+                vo.setState("已退款");
             }
 
             vo.setContent(content);

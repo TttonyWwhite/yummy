@@ -109,6 +109,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Result getBalance(int memberId) {
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        if (member == null)
+            return ResultUtils.error(11111, "用户不存在");
+        return ResultUtils.success(member.getBalance());
+    }
+
+    @Override
     public Result modifyAddress(Address address) {
         try {
             addressMapper.updateByPrimaryKey(address);

@@ -49,6 +49,11 @@ public class MemberController {
         return memberService.getMemberInfo(memberId);
     }
 
+    @RequestMapping("/getBalance")
+    public Result getBalance(@RequestParam Integer memberId) {
+        return memberService.getBalance(memberId);
+    }
+
     @RequestMapping("/modifyAddress")
     public Result modifyAddress(@RequestBody Address address) {
         return memberService.modifyAddress(address);

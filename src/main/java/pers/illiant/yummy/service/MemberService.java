@@ -21,6 +21,8 @@ public interface MemberService {
 
     Result getMemberInfo(int memberId);
 
+    Result getBalance(int memberId);
+
     Result modifyAddress(Address address);
 
     Result modifyInfo(MemberVO_post memberVO_post);

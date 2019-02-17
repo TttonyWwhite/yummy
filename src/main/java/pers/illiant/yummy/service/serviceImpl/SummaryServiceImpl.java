@@ -12,6 +12,7 @@ import pers.illiant.yummy.entity.OrderInfo;
 import pers.illiant.yummy.entity.Restaurant;
 import pers.illiant.yummy.model.BusinessSummaryVO;
 import pers.illiant.yummy.model.MemberSummaryVO;
+import pers.illiant.yummy.model.String_Int_Pair;
 import pers.illiant.yummy.model.RestaurantSummaryVO;
 import pers.illiant.yummy.service.SummaryService;
 import pers.illiant.yummy.util.Result;
@@ -143,14 +144,14 @@ public class SummaryServiceImpl implements SummaryService {
         List<OrderInfo> infos = orderInfoMapper.selectByRestaurantId(restaurantId);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(current_date);
-        //之前一天
+
         for (int i = 0;i < 7;i++) { //一周之内
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             Date date = calendar.getTime();
             double total = 0;
             BusinessSummaryVO vo = new BusinessSummaryVO();
             int month = calendar.get(Calendar.MONTH) + 1;
-            int day = calendar.get(Calendar.DAY_OF_MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
             vo.setDate(month + "/" + day);
 
             for (OrderInfo item : infos) {
@@ -168,21 +169,105 @@ public class SummaryServiceImpl implements SummaryService {
         return ResultUtils.success(list);
     }
 
+    @Override
+    public Result newMemberSummary(String restaurantId) {
+        List<String_Int_Pair> list = new ArrayList<>();
+        Date currentDate = new Date();
+        List<OrderInfo> infos = orderInfoMapper.selectByRestaurantId(restaurantId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DAY_OF_MONTH, -8);
+        for (int i = 0;i < 7;i++) {
+            String_Int_Pair vo = new String_Int_Pair();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH) + 1;
+            vo.setStr(month + "/" + day);
 
-    /**
-     * 计算两个date之间的天数差距
-     * @param currentDate 现在的时间
-     * @param beforeDate 过去的时间
-     * @return 相差天数
-     */
-    private int getDateGap(Date currentDate, Date beforeDate) {
-        long nd = 1000* 24* 60* 60;
-        long nh = 1000* 60* 60;
-        long nm = 1000* 60;
-        long diff = currentDate.getTime() - beforeDate.getTime();
-        int day = (int) (diff / nd);
+            vo.setCount(getNewMemberNumbers(calendar.getTime(), infos));
+            list.add(vo);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
 
-        return day;
+        return ResultUtils.success(list);
+    }
+
+    @Override
+    public Result orderCountSummary(String restaurantId) {
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        List<String_Int_Pair> list = new ArrayList<>();
+        List<OrderInfo> infos = orderInfoMapper.selectByRestaurantId(restaurantId);
+
+
+        for (int i = 0;i < 7;i++) {
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            Date date = calendar.getTime();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            String_Int_Pair vo = new String_Int_Pair();
+            vo.setStr(month + "/" + day);
+
+            int orderCount = 0;
+
+            for (OrderInfo item : infos) {
+                Date temp = item.getOrderTime();
+                LocalDate ld1 = new LocalDate(new DateTime(date));
+                LocalDate ld2 = new LocalDate(new DateTime(temp));
+                if (ld1.equals(ld2)) {
+                    orderCount++;
+                }
+            }
+            vo.setCount(orderCount);
+            list.add(vo);
+
+        }
+
+        return ResultUtils.success(list);
+
+    }
+
+    private boolean isNewMember(int memberId, List<OrderInfo> orderInfos, Date date) {
+        for (OrderInfo item : orderInfos) {
+            if (item.getOrderTime().before(date) && item.getMemberId() == memberId)
+                return false;
+        }
+
+        return true;
+    }
+
+    private int getNewMemberNumbers(Date date, List<OrderInfo> orderInfos) {
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        List<OrderInfo> todayOrders = new ArrayList<>();
+        for (OrderInfo item : orderInfos) {
+            LocalDate ld1 = new LocalDate(new DateTime(date));
+            LocalDate ld2 = new LocalDate(new DateTime(item.getOrderTime())).minusDays(1);
+            if (ld1.equals(ld2)) {
+                todayOrders.add(item);
+            }
+        }
+        List<Integer> todayMemberIds = new ArrayList<>();
+        List<OrderInfo> todayInfos = new ArrayList<>();
+
+        //去掉同一天中重复下单的id
+        for (OrderInfo item : todayOrders) {
+            if ( !todayMemberIds.contains(item.getMemberId())) {
+                todayMemberIds.add(item.getMemberId());
+                todayInfos.add(item);
+            }
+
+        }
+
+        int newMemberNumber = 0;
+
+        for (OrderInfo item : todayInfos) {
+            if (isNewMember(item.getMemberId(), orderInfos, date)) {
+                newMemberNumber++;
+            }
+        }
+
+        return newMemberNumber;
     }
 
 

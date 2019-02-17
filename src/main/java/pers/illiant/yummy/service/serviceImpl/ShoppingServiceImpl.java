@@ -79,7 +79,6 @@ public class ShoppingServiceImpl implements ShoppingService {
            OrderInfo info = new OrderInfo();
            //此时订单状态为NotPaid
 
-
            info = new OrderInfo(order.getMemberId(), order.getRestaurantId(), order.getOrderTime(), order.getExpectTime(), price, freight, "NotPaid", order.getAddressId());
 
            orderInfoMapper.insert(info);

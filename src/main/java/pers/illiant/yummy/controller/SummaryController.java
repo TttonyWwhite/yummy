@@ -39,4 +39,14 @@ public class SummaryController {
     public Result getBusinessSummary(String restaurantId) {
         return summaryService.businessSummary(restaurantId);
     }
+
+    @RequestMapping("/getNewMemberSummary")
+    public Result getNewMemberSummary(String restaurantId) {
+        return summaryService.newMemberSummary(restaurantId);
+    }
+
+    @RequestMapping("/getOrderSummary")
+    public Result getOrderSummary(String restaurantId) {
+        return summaryService.orderCountSummary(restaurantId);
+    }
 }

@@ -34,4 +34,9 @@ public class SummaryController {
     public Result getMemberLevelSummary() {
         return summaryService.memberLevelSummary();
     }
+
+    @RequestMapping("/getBusinessSummary")
+    public Result getBusinessSummary(String restaurantId) {
+        return summaryService.businessSummary(restaurantId);
+    }
 }

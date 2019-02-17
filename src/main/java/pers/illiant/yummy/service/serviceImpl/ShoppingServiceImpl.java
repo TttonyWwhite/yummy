@@ -221,7 +221,14 @@ public class ShoppingServiceImpl implements ShoppingService {
         double balance = member.getBalance();
         double total = info.getFreight() + info.getPrice();
 
-        balance += Double.parseDouble(df.format(total * 0.8));
+        if (info.getState().equals("Paid")) {
+            balance += total;
+        } else if (info.getState().equals("Accepted")) {
+            balance += Double.parseDouble(df.format(total * 0.8));
+        } else {
+            return ResultUtils.error(11126, "无法退款");
+        }
+
         balance = Double.parseDouble(df.format(balance));
 
         member.setBalance(balance);

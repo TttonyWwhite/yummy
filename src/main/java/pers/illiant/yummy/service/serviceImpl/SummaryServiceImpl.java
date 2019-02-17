@@ -4,18 +4,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pers.illiant.yummy.dao.AddressMapper;
 import pers.illiant.yummy.dao.MemberMapper;
+import pers.illiant.yummy.dao.OrderInfoMapper;
 import pers.illiant.yummy.dao.RestaurantMapper;
 import pers.illiant.yummy.entity.Address;
 import pers.illiant.yummy.entity.Member;
+import pers.illiant.yummy.entity.OrderInfo;
 import pers.illiant.yummy.entity.Restaurant;
+import pers.illiant.yummy.model.BusinessSummaryVO;
 import pers.illiant.yummy.model.MemberSummaryVO;
 import pers.illiant.yummy.model.RestaurantSummaryVO;
 import pers.illiant.yummy.service.SummaryService;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 @Service("summaryService")
 public class SummaryServiceImpl implements SummaryService {
@@ -35,6 +43,9 @@ public class SummaryServiceImpl implements SummaryService {
 
     @Autowired
     AddressMapper addressMapper;
+
+    @Autowired
+    OrderInfoMapper orderInfoMapper;
 
     @Override
     public Result restaurantPositionSummary() {
@@ -123,6 +134,55 @@ public class SummaryServiceImpl implements SummaryService {
             result.add(vo);
         }
         return ResultUtils.success(result);
+    }
+
+    @Override
+    public Result businessSummary(String restaurantId) {
+        Date current_date = new Date();
+        List<BusinessSummaryVO> list = new ArrayList<>();
+        List<OrderInfo> infos = orderInfoMapper.selectByRestaurantId(restaurantId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(current_date);
+        //之前一天
+        for (int i = 0;i < 7;i++) { //一周之内
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            Date date = calendar.getTime();
+            double total = 0;
+            BusinessSummaryVO vo = new BusinessSummaryVO();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH) + 1;
+            vo.setDate(month + "/" + day);
+
+            for (OrderInfo item : infos) {
+                Date temp = item.getOrderTime();
+                LocalDate ld1 = new LocalDate(new DateTime(date));
+                LocalDate ld2 = new LocalDate(new DateTime(temp));
+                if (ld1.equals(ld2)) {
+                    total += item.getPrice(); //营收额不算运费
+                }
+            }
+
+            vo.setTotal(total);
+            list.add(vo);
+        }
+        return ResultUtils.success(list);
+    }
+
+
+    /**
+     * 计算两个date之间的天数差距
+     * @param currentDate 现在的时间
+     * @param beforeDate 过去的时间
+     * @return 相差天数
+     */
+    private int getDateGap(Date currentDate, Date beforeDate) {
+        long nd = 1000* 24* 60* 60;
+        long nh = 1000* 60* 60;
+        long nm = 1000* 60;
+        long diff = currentDate.getTime() - beforeDate.getTime();
+        int day = (int) (diff / nd);
+
+        return day;
     }
 
 

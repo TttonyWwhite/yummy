@@ -15,4 +15,7 @@ public interface SummaryService {
 
     //统计会员等级
     Result memberLevelSummary();
+
+    //餐厅营业额统计(最近一周)
+    Result businessSummary(String restaurantId);
 }

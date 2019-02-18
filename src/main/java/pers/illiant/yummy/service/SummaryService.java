@@ -22,5 +22,9 @@ public interface SummaryService {
     //餐厅新增用户统计（第一次在本餐厅点餐的用户）
     Result newMemberSummary(String restaurantId);
 
+    //餐厅订单数统计
     Result orderCountSummary(String restaurantId);
+
+    //餐厅退订数统计
+    Result refundSummary(String restaurantId);
 }

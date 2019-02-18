@@ -37,7 +37,6 @@ public class RestaurantController {
         return ResultUtils.success(restList);
     }
 
-    @LoginRequired
     @RequestMapping("/releaseFood")
     public Result releaseFood(@RequestBody FoodVO_release food) {
         return restaurantService.releaseFood(food);

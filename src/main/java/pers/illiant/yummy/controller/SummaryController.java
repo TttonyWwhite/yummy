@@ -49,4 +49,9 @@ public class SummaryController {
     public Result getOrderSummary(String restaurantId) {
         return summaryService.orderCountSummary(restaurantId);
     }
+
+    @RequestMapping("/getRefundSummary")
+    public Result getRefundSummary(String restaurantId) {
+        return summaryService.refundSummary(restaurantId);
+    }
 }

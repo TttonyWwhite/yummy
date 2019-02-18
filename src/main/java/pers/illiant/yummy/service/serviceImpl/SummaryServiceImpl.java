@@ -227,6 +227,39 @@ public class SummaryServiceImpl implements SummaryService {
 
     }
 
+    @Override
+    public Result refundSummary(String restaurantId) {
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        List<String_Int_Pair> list = new ArrayList<>();
+        List<OrderInfo> infos = orderInfoMapper.selectByRestaurantId(restaurantId);
+
+        for (int i = 0;i < 7;i++) {
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            Date date = calendar.getTime();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            String_Int_Pair vo = new String_Int_Pair();
+            vo.setStr(month + "/" + day);
+
+            int refundCount = 0;
+            for (OrderInfo item : infos) {
+                Date temp = item.getOrderTime();
+                LocalDate ld1 = new LocalDate(new DateTime(date));
+                LocalDate ld2 = new LocalDate(new DateTime(temp));
+                if (ld1.equals(ld2) && item.getState().equals("Refund")) {
+                    refundCount++;
+                }
+            }
+
+            vo.setCount(refundCount);
+            list.add(vo);
+        }
+
+        return ResultUtils.success(list);
+    }
+
     private boolean isNewMember(int memberId, List<OrderInfo> orderInfos, Date date) {
         for (OrderInfo item : orderInfos) {
             if (item.getOrderTime().before(date) && item.getMemberId() == memberId)

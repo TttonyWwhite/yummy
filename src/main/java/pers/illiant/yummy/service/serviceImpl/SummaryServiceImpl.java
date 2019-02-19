@@ -2,18 +2,10 @@ package pers.illiant.yummy.service.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pers.illiant.yummy.dao.AddressMapper;
-import pers.illiant.yummy.dao.MemberMapper;
-import pers.illiant.yummy.dao.OrderInfoMapper;
-import pers.illiant.yummy.dao.RestaurantMapper;
-import pers.illiant.yummy.entity.Address;
-import pers.illiant.yummy.entity.Member;
-import pers.illiant.yummy.entity.OrderInfo;
-import pers.illiant.yummy.entity.Restaurant;
-import pers.illiant.yummy.model.BusinessSummaryVO;
-import pers.illiant.yummy.model.MemberSummaryVO;
-import pers.illiant.yummy.model.String_Int_Pair;
-import pers.illiant.yummy.model.RestaurantSummaryVO;
+import org.springframework.web.bind.annotation.RequestBody;
+import pers.illiant.yummy.dao.*;
+import pers.illiant.yummy.entity.*;
+import pers.illiant.yummy.model.*;
 import pers.illiant.yummy.service.SummaryService;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
@@ -47,6 +39,9 @@ public class SummaryServiceImpl implements SummaryService {
 
     @Autowired
     OrderInfoMapper orderInfoMapper;
+
+    @Autowired
+    UpdateRequestMapper updateRequestMapper;
 
     @Override
     public Result restaurantPositionSummary() {
@@ -258,6 +253,81 @@ public class SummaryServiceImpl implements SummaryService {
         }
 
         return ResultUtils.success(list);
+    }
+
+    @Override
+    public Result getRequests() {
+        List<UpdateRequest> list = updateRequestMapper.selectAll();
+        List<RequestVO> result = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        for (UpdateRequest item : list ) {
+            RequestVO vo = new RequestVO();
+            vo.setRequestId(item.getRequestId());
+            vo.setAddress(item.getAddress());
+            vo.setImgUrl(item.getImgurl());
+            vo.setPhoneNumber(item.getPhonenumber());
+            vo.setRequestTime(sdf.format(item.getRequestTime()));
+            vo.setRestaurantId(item.getRestaurantId());
+            vo.setShopName(item.getShopname());
+            vo.setType(item.getType());
+
+            switch (item.getState()) {
+                case "Wait":
+                    vo.setState("待处理");
+                    break;
+                case "Approved":
+                    vo.setState("已批准");
+                    break;
+                case "Rejected":
+                    vo.setState("已驳回");
+                    break;
+            }
+
+            result.add(vo);
+        }
+
+        return ResultUtils.success(result);
+    }
+
+    @Override
+    public Result getRequest(int requestId) {
+        UpdateRequest request = updateRequestMapper.selectByPrimaryKey(requestId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String state = "";
+        switch (request.getState()) {
+            case "Wait":
+                state = "待处理";
+                break;
+            case "Approved":
+                state = "已批准";
+                break;
+            case "Rejected":
+                state = "已驳回";
+                break;
+        }
+
+        RequestVO vo = new RequestVO(request.getImgurl(), request.getShopname(), request.getRestaurantId(), request.getAddress(),
+        request.getType(), request.getPhonenumber(), sdf.format(request.getRequestTime()), requestId, state);
+
+        return ResultUtils.success(vo);
+    }
+
+    @Override
+    public Result rejectRequest(int requestId) {
+        UpdateRequest request = updateRequestMapper.selectByPrimaryKey(requestId);
+        request.setState("Rejected");
+        updateRequestMapper.updateByPrimaryKey(request);
+
+        return ResultUtils.success();
+    }
+
+    @Override
+    public Result approveRequest(int requestId) {
+        UpdateRequest request = updateRequestMapper.selectByPrimaryKey(requestId);
+        request.setState("Approved");
+        updateRequestMapper.updateByPrimaryKey(request);
+
+        return ResultUtils.success();
     }
 
     private boolean isNewMember(int memberId, List<OrderInfo> orderInfos, Date date) {

@@ -7,14 +7,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import pers.illiant.yummy.dao.FoodMapper;
-import pers.illiant.yummy.dao.OrderInfoMapper;
-import pers.illiant.yummy.dao.OrderProductMapper;
-import pers.illiant.yummy.dao.RestaurantMapper;
-import pers.illiant.yummy.entity.Food;
-import pers.illiant.yummy.entity.OrderInfo;
-import pers.illiant.yummy.entity.OrderProduct;
-import pers.illiant.yummy.entity.Restaurant;
+import pers.illiant.yummy.dao.*;
+import pers.illiant.yummy.entity.*;
 import pers.illiant.yummy.model.*;
 import pers.illiant.yummy.service.RestaurantService;
 import pers.illiant.yummy.util.IDCreater;
@@ -26,6 +20,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service("restaurantService")
@@ -44,10 +39,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     OrderProductMapper orderProductMapper;
 
     @Autowired
+    UpdateRequestMapper updateRequestMapper;
+
+    @Autowired
     private JavaMailSender javaMailSender;
 
     @Autowired
     private TemplateEngine templateEngine;
+
+
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -162,6 +162,19 @@ public class RestaurantServiceImpl implements RestaurantService {
         orderInfoMapper.updateByPrimaryKey(info);
 
         return ResultUtils.success();
+    }
+
+    @Override
+    public Result updateRestaurant(RestaurantVO_update restaurantVO) {
+        UpdateRequest request = new UpdateRequest(restaurantVO.getRestaurantId(), restaurantVO.getShopName(),
+                restaurantVO.getAddress(), restaurantVO.getLng_lat(), restaurantVO.getImgUrl(), restaurantVO.getType(),
+                restaurantVO.getPhoneNumber());
+        request.setState("Wait");
+        request.setRequestTime(new Date());
+        updateRequestMapper.insert(request);
+
+        return ResultUtils.success();
+
     }
 
     private void sendRestaurantMail(String recipient, String restaurantId) {

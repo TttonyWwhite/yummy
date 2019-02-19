@@ -27,4 +27,15 @@ public interface SummaryService {
 
     //餐厅退订数统计
     Result refundSummary(String restaurantId);
+
+    //获取餐厅修改信息申请列表
+    Result getRequests();
+
+    Result getRequest(int requestId);
+
+    Result rejectRequest(int requestId);
+
+    Result approveRequest(int requestId);
 }
+
+

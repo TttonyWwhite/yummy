@@ -1,9 +1,7 @@
 package pers.illiant.yummy.service;
 
 import pers.illiant.yummy.entity.Restaurant;
-import pers.illiant.yummy.model.FoodVO_release;
-import pers.illiant.yummy.model.RestaurantVO_post;
-import pers.illiant.yummy.model.RestaurantVO_register;
+import pers.illiant.yummy.model.*;
 import pers.illiant.yummy.util.Result;
 
 import java.util.List;
@@ -22,4 +20,9 @@ public interface RestaurantService {
     Result getOrders(String id);
 
     Result acceptOrder(int orderId);
+
+    /**
+     * 处理餐厅发送的修改信息请求
+     */
+    Result updateRestaurant(RestaurantVO_update restaurantVO);
 }

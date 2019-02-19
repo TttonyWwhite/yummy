@@ -49,6 +49,12 @@ public class RestaurantController {
         return restaurantService.login(restaurant.getRestaurantId(), restaurant.getPassword());
     }
 
+    @RequestMapping("/updateRestaurant")
+    public Result update(@RequestBody RestaurantVO_update restaurant) {
+        return restaurantService.updateRestaurant(restaurant);
+    }
+
+
     @RequestMapping("/getFoods")
     public Result getFoods(@RequestParam String restaurantId) {
         List<Food> list = foodService.getFoodOfRestaurant(restaurantId);
@@ -75,4 +81,5 @@ public class RestaurantController {
     public Result acceptOrder(@RequestParam Integer orderId) {
         return restaurantService.acceptOrder(orderId);
     }
+
 }

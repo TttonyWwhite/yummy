@@ -80,6 +80,12 @@
     where member_name = #{memberName, jdbcType=VARCHAR}
   </select>
 
+  <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select member_id, member_name, member_password, email, phoneNumber, default_address, `level`, active, balance
+    from member
+    where email = #{email, jdbcType=VARCHAR}
+  </select>
+
   <update id="modifyInfo" parameterType="pers.illiant.yummy.entity.Member">
     update member
     set member_name = #{memberName,jdbcType=VARCHAR},

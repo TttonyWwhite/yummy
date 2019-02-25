@@ -55,6 +55,13 @@ public interface MemberMapper {
     Member selectByName(String memberName);
 
     /**
+     * 根据注册邮箱搜索会员
+     * @param email 邮箱
+     * @return 对应邮箱的会员对象
+     */
+    Member selectByEmail(String email);
+
+    /**
      * 修改用户资料
      */
     int modifyInfo(Member record);

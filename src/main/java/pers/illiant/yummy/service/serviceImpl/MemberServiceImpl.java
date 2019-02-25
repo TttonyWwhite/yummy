@@ -74,16 +74,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean signup(String name, String email, String password) {
+    public Result signup(String name, String email, String password, String phoneNumber) {
+        if (memberMapper.selectByEmail(email) != null)
+            return ResultUtils.error(11126, "邮箱已被注册");
+
         Member member = new Member();
         member.setMemberName(name);
         member.setEmail(email);
         member.setMemberPassword(password);
+        member.setPhoneNumber(phoneNumber);
         member.setActive(false);
         memberMapper.insert(member);
         map.put(member.getMemberId(), member);
         sendTemplateMail(member.getEmail(), member.getMemberId());
-        return true;
+
+        return ResultUtils.success();
     }
 
     @Override

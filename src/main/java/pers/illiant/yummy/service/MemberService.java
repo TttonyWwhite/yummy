@@ -13,7 +13,7 @@ public interface MemberService {
 
     Result signin(MemberVO_login member);
 
-    boolean signup(String name, String email, String password);
+    Result signup(String name, String email, String password, String phoneNumber);
 
     Member findByName(String name);
 

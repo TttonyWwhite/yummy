@@ -3,7 +3,6 @@ package pers.illiant.yummy.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
-import pers.illiant.yummy.dao.MemberMapper;
 import pers.illiant.yummy.entity.Address;
 import pers.illiant.yummy.model.MemberVO_login;
 import pers.illiant.yummy.model.MemberVO_post;
@@ -31,10 +30,7 @@ public class MemberController {
 
     @RequestMapping("/signup")
     public Result signup(@RequestBody MemberVO_signup member) {
-       if (memberService.signup(member.getName(), member.getEmail(), member.getPassword()))
-           return ResultUtils.success();
-       else
-           return ResultUtils.error(11117, "注册失败");
+       return memberService.signup(member.getName(), member.getEmail(), member.getPassword(), member.getPhoneNumber());
     }
 
     @RequestMapping(value = "activation/{memberId}", method = RequestMethod.GET)

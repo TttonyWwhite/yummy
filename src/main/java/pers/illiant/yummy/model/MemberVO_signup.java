@@ -5,14 +5,16 @@ public class MemberVO_signup {
     private String name;
     private String email;
     private String password;
+    private String phoneNumber;
 
     public MemberVO_signup() {
     }
 
-    public MemberVO_signup(String name, String email, String password) {
+    public MemberVO_signup(String name, String email, String password, String phoneNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getName() {
@@ -37,5 +39,13 @@ public class MemberVO_signup {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

@@ -43,6 +43,9 @@ public class SummaryServiceImpl implements SummaryService {
     @Autowired
     UpdateRequestMapper updateRequestMapper;
 
+    @Autowired
+    IncomeMapper incomeMapper;
+
     @Override
     public Result restaurantPositionSummary() {
         List<Restaurant> restaurantList = restaurantMapper.selectAll();
@@ -249,6 +252,38 @@ public class SummaryServiceImpl implements SummaryService {
             }
 
             vo.setCount(refundCount);
+            list.add(vo);
+        }
+
+        return ResultUtils.success(list);
+    }
+
+    @Override
+    public Result financialSummary() {
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        List<FinancialVO> list = new ArrayList<>();
+        List<Income> incomes = incomeMapper.selectAll();
+
+        for (int i = 0;i < 7;i++) {
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            Date date = calendar.getTime();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            FinancialVO vo = new FinancialVO();
+            vo.setDate(month + "/" + day);
+
+            double totalIncome = 0;
+            for (Income item : incomes) {
+                Date temp = item.getIncomeDate();
+                LocalDate ld1 = new LocalDate(new DateTime(date));
+                LocalDate ld2 = new LocalDate(new DateTime(temp));
+                if (ld1.equals(ld2))
+                    totalIncome += item.getShare();
+            }
+
+            vo.setIncome(totalIncome);
             list.add(vo);
         }
 

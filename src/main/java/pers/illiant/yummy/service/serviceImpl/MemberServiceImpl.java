@@ -84,6 +84,7 @@ public class MemberServiceImpl implements MemberService {
         member.setMemberPassword(password);
         member.setPhoneNumber(phoneNumber);
         member.setActive(false);
+        member.setLevel(1);
         memberMapper.insert(member);
         map.put(member.getMemberId(), member);
         sendTemplateMail(member.getEmail(), member.getMemberId());

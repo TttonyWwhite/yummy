@@ -28,6 +28,9 @@ public interface SummaryService {
     //餐厅退订数统计
     Result refundSummary(String restaurantId);
 
+    //平台营收统计(最近一周)
+    Result financialSummary();
+
     //获取餐厅修改信息申请列表
     Result getRequests();
 

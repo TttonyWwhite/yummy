@@ -56,6 +56,9 @@ public class SummaryController {
         return summaryService.refundSummary(restaurantId);
     }
 
+    @RequestMapping("/getFinancialSummary")
+    public Result getFinancialSummary() { return summaryService.financialSummary(); }
+
     @RequestMapping("/getRequests")
     public Result getRequests() {
         return summaryService.getRequests();

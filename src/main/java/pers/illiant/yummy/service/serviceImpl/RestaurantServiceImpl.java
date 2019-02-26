@@ -12,7 +12,6 @@ import pers.illiant.yummy.entity.*;
 import pers.illiant.yummy.model.*;
 import pers.illiant.yummy.service.RestaurantService;
 import pers.illiant.yummy.util.IDCreater;
-import pers.illiant.yummy.util.MailSender;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
 

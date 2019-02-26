@@ -14,6 +14,7 @@ import pers.illiant.yummy.util.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 
@@ -35,7 +36,15 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Autowired
     AddressMapper addressMapper;
 
+    @Autowired
+    YummyAccountMapper yummyAccountMapper;
+
+    @Autowired
+    IncomeMapper incomeMapper;
+
     private static final int FIFTEENMINS = 900000;
+
+    private static final double SHARE_PERCENT = 0.15; //yummy平台的抽成
 
     @Override
     public Result orderFood(OrderVO order) {
@@ -190,6 +199,29 @@ public class ShoppingServiceImpl implements ShoppingService {
         OrderInfo info = orderInfoMapper.selectByPrimaryKey(orderId);
         info.setState("Arrived"); //已送达
         orderInfoMapper.updateByPrimaryKey(info);
+
+        //进行餐品结算
+        Restaurant restaurant = restaurantMapper.selectByPrimaryKey(info.getRestaurantId());
+        YummyAccount account = yummyAccountMapper.selectByPrimaryKey(1);
+        DecimalFormat format = new DecimalFormat("0.00");
+
+        double shareForYummy = Double.parseDouble(format.format(info.getPrice() * SHARE_PERCENT)); // 平台应该从订单中得到的抽成
+        double shareForRestaurant = Double.parseDouble(format.format(info.getPrice() * (1 - SHARE_PERCENT))); //餐厅应该得到的份额
+
+        Income income = new Income();
+        income.setIncomeDate(new Date());
+        income.setShare(shareForYummy);
+        incomeMapper.insert(income);
+
+        shareForYummy += account.getBalance();
+        account.setBalance(shareForYummy);
+        yummyAccountMapper.updateByPrimaryKey(account);
+
+        shareForRestaurant += restaurant.getBalance();
+        restaurant.setBalance(shareForRestaurant);
+        restaurantMapper.updateByPrimaryKey(restaurant);
+
+
 
         return ResultUtils.success();
     }

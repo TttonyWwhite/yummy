@@ -89,9 +89,18 @@
             <!--<property name="useActualColumnNames" value="false" />-->
             <!--<generatedKey column="member_id" sqlStatement="Mysql" identity="true" />-->
         <!--</table>-->
-        <table tableName="update_request" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+        <!--<table tableName="update_request" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">-->
+            <!--<property name="useActualColumnNames" value="false" />-->
+            <!--<generatedKey column="request_id" sqlStatement="Mysql" identity="true" />-->
+        <!--</table>-->
+        <!--<table tableName="yummy_account" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">-->
+            <!--<property name="useActualColumnNames" value="false" />-->
+            <!--<generatedKey column="account_id" sqlStatement="Mysql" identity="true" />-->
+        <!--</table>-->
+
+        <table tableName="income" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
             <property name="useActualColumnNames" value="false" />
-            <generatedKey column="request_id" sqlStatement="Mysql" identity="true" />
+            <generatedKey column="id" sqlStatement="Mysql" identity="true" />
         </table>
     </context>
 </generatorConfiguration>

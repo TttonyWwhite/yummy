@@ -132,7 +132,7 @@ public class ShoppingServiceImpl implements ShoppingService {
                 state = "已退款";
             }
 
-            OrderVO_post vo = new OrderVO_post(item.getOrderId(), restaurant.getImgurl(), restaurant.getShopName(), formatter.format(item.getOrderTime()), item.getPrice(), state);
+            OrderVO_post vo = new OrderVO_post(item.getOrderId(), restaurant.getImgurl(), restaurant.getShopName(), formatter.format(item.getOrderTime()), item.getPrice() + item.getFreight(), state);
             retList.add(vo);
         }
 
@@ -234,8 +234,14 @@ public class ShoppingServiceImpl implements ShoppingService {
             return ResultUtils.error(11125, "余额不足");
         }
 
+        DecimalFormat df = new DecimalFormat("0.00");
+
         double new_balance = member.getBalance() - info.getFreight();
         new_balance -= info.getPrice();
+
+        //避免出现浮点数位数问题
+        new_balance = Double.parseDouble(df.format(new_balance));
+
         member.setBalance(new_balance);
         memberMapper.updateByPrimaryKey(member);
         info.setState("Paid");

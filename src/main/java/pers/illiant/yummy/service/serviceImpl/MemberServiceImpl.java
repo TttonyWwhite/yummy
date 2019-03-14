@@ -85,6 +85,7 @@ public class MemberServiceImpl implements MemberService {
         member.setPhoneNumber(phoneNumber);
         member.setActive(false);
         member.setLevel(1);
+        member.setBalance(0.0);
         memberMapper.insert(member);
         map.put(member.getMemberId(), member);
         sendTemplateMail(member.getEmail(), member.getMemberId());
@@ -123,6 +124,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Result getLevel(int memberId) {
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        return ResultUtils.success(member.getLevel());
+    }
+
+    @Override
     public Result modifyAddress(Address address) {
         try {
             addressMapper.updateByPrimaryKey(address);
@@ -148,6 +155,14 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return ResultUtils.success();
+    }
+
+    @Override
+    public Result charge(int memberId, double chargeAmount) {
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        member.setBalance(member.getBalance() + chargeAmount);
+        memberMapper.updateByPrimaryKey(member);
+        return ResultUtils.success(member.getBalance());
     }
 
     @Override

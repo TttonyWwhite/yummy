@@ -13,7 +13,6 @@ import pers.illiant.yummy.util.Result;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import pers.illiant.yummy.util.ResultUtils;
 
 import java.io.IOException;
 
@@ -50,6 +49,9 @@ public class MemberController {
         return memberService.getBalance(memberId);
     }
 
+    @RequestMapping("/getLevel")
+    public Result getLevel(@RequestParam Integer memberId) { return memberService.getLevel(memberId); }
+
     @RequestMapping("/modifyAddress")
     public Result modifyAddress(@RequestBody Address address) {
         return memberService.modifyAddress(address);
@@ -59,6 +61,11 @@ public class MemberController {
     public Result modifyInfo(@RequestBody MemberVO_post member) {
 
         return memberService.modifyInfo(member);
+    }
+
+    @RequestMapping("/charge")
+    public Result modifyInfo(@RequestParam Integer memberId, @RequestParam Double chargeAmount) {
+        return memberService.charge(memberId, chargeAmount);
     }
 
     @RequestMapping("/addAddress")

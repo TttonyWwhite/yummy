@@ -23,9 +23,13 @@ public interface MemberService {
 
     Result getBalance(int memberId);
 
+    Result getLevel(int memberId);
+
     Result modifyAddress(Address address);
 
     Result modifyInfo(MemberVO_post memberVO_post);
+
+    Result charge(int memberId, double chargeAmount);
 
     Result addAddress(Address address);
 

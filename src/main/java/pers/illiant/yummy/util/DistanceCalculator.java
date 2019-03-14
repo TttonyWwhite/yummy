@@ -20,12 +20,4 @@ public class DistanceCalculator {
         s = s*1000;
         return s;
     }
-
-    public static void main(String[] args) {
-        double lat1 = 31.719348;
-        double lng1 = 119.572075;
-        double lat2 = 31.763466;
-        double lng2 = 119.946973;
-        System.out.println(getDistance(lat1, lng1, lat2, lng2));
-    }
 }

@@ -156,7 +156,7 @@ public class SummaryServiceImpl implements SummaryService {
                 Date temp = item.getOrderTime();
                 LocalDate ld1 = new LocalDate(new DateTime(date));
                 LocalDate ld2 = new LocalDate(new DateTime(temp));
-                if (ld1.equals(ld2)) {
+                if (ld1.equals(ld2) && item.getState().equals("Arrived")) {
                     total += item.getPrice(); //营收额不算运费
                 }
             }
@@ -359,7 +359,28 @@ public class SummaryServiceImpl implements SummaryService {
     @Override
     public Result approveRequest(int requestId) {
         UpdateRequest request = updateRequestMapper.selectByPrimaryKey(requestId);
+
+        Restaurant restaurant = restaurantMapper.selectByPrimaryKey(request.getRestaurantId());
+
+        if (request.getShopname() != null)
+            restaurant.setShopName(request.getShopname());
+        if (request.getAddress() != null)
+            restaurant.setAddress(request.getAddress());
+        if (request.getLngLat() != null)
+            restaurant.setLngLat(request.getLngLat());
+        if (request.getImgurl() != null)
+            restaurant.setImgurl(request.getImgurl());
+        if (request.getPhonenumber() != null)
+            restaurant.setPhoneNumber(request.getPhonenumber());
+        if (request.getType() != null)
+            restaurant.setType(request.getType());
+
+        restaurantMapper.updateByPrimaryKey(restaurant);
+
         request.setState("Approved");
+
+
+
         updateRequestMapper.updateByPrimaryKey(request);
 
         return ResultUtils.success();

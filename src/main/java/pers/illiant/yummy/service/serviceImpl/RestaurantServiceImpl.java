@@ -55,6 +55,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Result register(RestaurantVO_register restaurant) {
         String id = IDCreater.doGenRandomNum(7);
         Restaurant restaurant1 = new Restaurant(id, restaurant.getAddress(), restaurant.getType(), restaurant.getPhoneNumber(), restaurant.getLng_lat(), restaurant.getImgUrl(), restaurant.getShopName(), restaurant.getPassword(), restaurant.getEmail());
+        restaurant1.setBalance(0.0);
         try {
             restaurantMapper.insert(restaurant1);
             sendRestaurantMail(restaurant.getEmail(), id);

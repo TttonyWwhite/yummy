@@ -42,7 +42,7 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Autowired
     IncomeMapper incomeMapper;
 
-    private static final int FIFTEENMINS = 900000;
+    private static final int FIFTEENMINS = 120000;
 
     private static final double SHARE_PERCENT = 0.15; //yummy平台的抽成
 

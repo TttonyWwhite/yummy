@@ -11,6 +11,7 @@ import pers.illiant.yummy.dao.*;
 import pers.illiant.yummy.entity.*;
 import pers.illiant.yummy.model.*;
 import pers.illiant.yummy.service.RestaurantService;
+import pers.illiant.yummy.util.DistanceCalculator;
 import pers.illiant.yummy.util.IDCreater;
 import pers.illiant.yummy.util.Result;
 import pers.illiant.yummy.util.ResultUtils;
@@ -71,10 +72,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         List<Restaurant> list = restaurantMapper.selectAll();
         List<RestaurantVO_post> retList = new ArrayList<>();
         for (Restaurant rest : list) {
-            RestaurantVO_post vo = new RestaurantVO_post();
-            vo.setShopName(rest.getShopName());
-            vo.setImgUrl(rest.getImgurl());
-            vo.setRestaurantId(rest.getRestaurantId());
+            RestaurantVO_post vo = new RestaurantVO_post(rest);
+//            vo.setShopName(rest.getShopName());
+//            vo.setImgUrl(rest.getImgurl());
+//            vo.setRestaurantId(rest.getRestaurantId());
             retList.add(vo);
         }
 

@@ -209,6 +209,8 @@ public class SummaryServiceImpl implements SummaryService {
             int orderCount = 0;
 
             for (OrderInfo item : infos) {
+                if (!item.getState().equals("Arrived"))
+                    continue;
                 Date temp = item.getOrderTime();
                 LocalDate ld1 = new LocalDate(new DateTime(date));
                 LocalDate ld2 = new LocalDate(new DateTime(temp));
@@ -409,9 +411,9 @@ public class SummaryServiceImpl implements SummaryService {
         List<Integer> todayMemberIds = new ArrayList<>();
         List<OrderInfo> todayInfos = new ArrayList<>();
 
-        //去掉同一天中重复下单的id
+        //去掉同一天中重复下单的id 和 退货的订单中的编号
         for (OrderInfo item : todayOrders) {
-            if ( !todayMemberIds.contains(item.getMemberId())) {
+            if ( !todayMemberIds.contains(item.getMemberId()) && item.getState().equals("Arrived")) {
                 todayMemberIds.add(item.getMemberId());
                 todayInfos.add(item);
             }

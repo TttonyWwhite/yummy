@@ -10,7 +10,7 @@ import pers.illiant.yummy.util.TokenCreater;
 public class UtilController {
     @RequestMapping("/getToken")
     public String getToken() {
-        String bucket = "yummy";
+        String bucket = "yummy-bucket2";
         String accessKey = "j0dwMMGFcKPhncC7vb_PWXshbpiSMEWB69NiKhn4";
         String secretKey = "2vWVIw3WJfk314YN3e24ZnixdJMbyoZ14FXiqF--";
 

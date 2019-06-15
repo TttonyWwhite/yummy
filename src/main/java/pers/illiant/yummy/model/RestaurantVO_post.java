@@ -2,12 +2,16 @@ package pers.illiant.yummy.model;
 
 import pers.illiant.yummy.entity.Restaurant;
 
+import java.util.Random;
+
 public class RestaurantVO_post {
     private String restaurantId;
     private String shopName;
-    private int rate = 4;
-    private double deliveryCost = 3;
+    private int rate;
+    private double deliveryCost;
     private String imgUrl;
+    private int deliveryTime;
+    private Random rand = new Random();
 
     //todo 需要加入rate字段，根据用户地址和店铺地址之间的距离计算配送费用
 
@@ -35,6 +39,10 @@ public class RestaurantVO_post {
         this.imgUrl = restaurant.getImgurl();
         this.restaurantId = restaurant.getRestaurantId();
         //todo 要计算出rate和配送费用，现在先用一个虚拟值
+        rate = rand.nextInt(5);
+        deliveryCost = rand.nextInt(5);
+        deliveryTime = rand.nextInt(40);
+        if (deliveryTime < 20) deliveryTime += 20;
     }
 
     public String getShopName() {
@@ -67,5 +75,13 @@ public class RestaurantVO_post {
 
     public void setRestaurantId(String restaurantId) {
         this.restaurantId = restaurantId;
+    }
+
+    public int getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(int deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 }

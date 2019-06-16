@@ -37,6 +37,13 @@ public class RestaurantController {
         return ResultUtils.success(restList);
     }
 
+    @RequestMapping("/getShopsByType")
+    public Result getShopsByType(@RequestParam String type) {
+        List<RestaurantVO_post> restList = restaurantService.getShopsByType(type);
+
+        return ResultUtils.success(restList);
+    }
+
     @RequestMapping("/releaseFood")
     public Result releaseFood(@RequestBody FoodVO_release food) {
         return restaurantService.releaseFood(food);

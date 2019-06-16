@@ -11,6 +11,8 @@ public interface RestaurantService {
 
     List<RestaurantVO_post> getAll();
 
+    List<RestaurantVO_post> getShopsByType(String type);
+
     Result releaseFood(FoodVO_release food);
 
     Result login(String id, String password);

@@ -83,6 +83,23 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public List<RestaurantVO_post> getShopsByType(String type) {
+        if (type.equals("全部商家")) {
+            return getAll();
+        }
+        List<Restaurant> list =restaurantMapper.selectAll();
+        List<RestaurantVO_post> retList = new ArrayList<>();
+        for (Restaurant rest : list) {
+            if (rest.getType().contains(type)) {
+                RestaurantVO_post vo = new RestaurantVO_post(rest);
+                retList.add(vo);
+            }
+        }
+
+        return retList;
+    }
+
+    @Override
     public Result releaseFood(FoodVO_release food) {
         Food food1 = new Food();
         food1.setFoodname(food.getFoodName());

@@ -207,6 +207,17 @@ public class RestaurantServiceImpl implements RestaurantService {
         return retList;
     }
 
+    @Override
+    public List<RestaurantVO_post> getShopsByPosition(double lng, double lat) {
+        List<Restaurant> list = restaurantMapper.selectAll();
+        List<RestaurantVO_post> retList = new ArrayList<>();
+        for (Restaurant rest : list) {
+            if (getDistance(lat, lng, rest) < 10000)
+                retList.add(new RestaurantVO_post(rest));
+        }
+        return retList;
+    }
+
     private void sendRestaurantMail(String recipient, String restaurantId) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
@@ -223,6 +234,17 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
 
         javaMailSender.send(message);
+    }
+
+
+    private double getDistance(double lat, double lng, Restaurant restaurant) {
+        String[] strs = restaurant.getLngLat().split(",");
+        double lng2 = Double.parseDouble(strs[0]);
+        double lat2 = Double.parseDouble(strs[1]);
+
+        double distance = DistanceCalculator.getDistance(lat, lng, lat2, lng2);
+
+        return distance;
     }
 
 

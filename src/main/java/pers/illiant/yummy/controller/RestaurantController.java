@@ -37,6 +37,12 @@ public class RestaurantController {
         return ResultUtils.success(restList);
     }
 
+    @RequestMapping("/getShopsByPosition")
+    public Result getShopsByPosition(@RequestParam double lng, @RequestParam double lat) {
+        List<RestaurantVO_post> restList = restaurantService.getShopsByPosition(lng, lat);
+        return ResultUtils.success(restList);
+    }
+
     @RequestMapping("/getShopsByType")
     public Result getShopsByType(@RequestParam String type) {
         List<RestaurantVO_post> restList = restaurantService.getShopsByType(type);

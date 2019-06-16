@@ -29,4 +29,6 @@ public interface RestaurantService {
     Result updateRestaurant(RestaurantVO_update restaurantVO);
 
     List<RestaurantVO_post> searchShop(String shopName);
+
+    List<RestaurantVO_post> getShopsByPosition(double lng, double lat);
 }

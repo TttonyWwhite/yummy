@@ -46,4 +46,6 @@ public interface RestaurantMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Restaurant record);
+
+    List<Restaurant> searchShop(String shopName);
 }

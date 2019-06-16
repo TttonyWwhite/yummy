@@ -195,6 +195,18 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     }
 
+    @Override
+    public List<RestaurantVO_post> searchShop(String shopName) {
+        List<Restaurant> list = restaurantMapper.searchShop(shopName);
+        List<RestaurantVO_post> retList = new ArrayList<>();
+        for (Restaurant rest : list) {
+            RestaurantVO_post vo = new RestaurantVO_post(rest);
+            retList.add(vo);
+        }
+
+        return retList;
+    }
+
     private void sendRestaurantMail(String recipient, String restaurantId) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {

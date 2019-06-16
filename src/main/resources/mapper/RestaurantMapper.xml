@@ -72,4 +72,11 @@
     select restaurant_id, address, `type`, phoneNumber, lng_lat, imgUrl, shopName, `password`, email, balance
     from restaurant
   </select>
+  
+  <select id="searchShop" resultMap="BaseResultMap">
+    select restaurant_id, address, `type`, phoneNumber, lng_lat, imgUrl, shopName, `password`, email, balance
+    from restaurant
+    where
+    shopName like CONCAT('%', #{shopName, jdbcType=VARCHAR}, '%')
+  </select>
 </mapper>

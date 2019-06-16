@@ -27,4 +27,6 @@ public interface RestaurantService {
      * 处理餐厅发送的修改信息请求
      */
     Result updateRestaurant(RestaurantVO_update restaurantVO);
+
+    List<RestaurantVO_post> searchShop(String shopName);
 }

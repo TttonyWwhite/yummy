@@ -79,6 +79,12 @@ public class RestaurantController {
         return ResultUtils.success(vo);
     }
 
+    @RequestMapping("/searchShop")
+    public Result searchShop(@RequestParam String keyword) {
+        List<RestaurantVO_post> list = restaurantService.searchShop(keyword);
+        return ResultUtils.success(list);
+    }
+
     @RequestMapping("/restaurant/getOrders")
     public Result getOrders(@RequestParam String restaurantId) {
         return restaurantService.getOrders(restaurantId);

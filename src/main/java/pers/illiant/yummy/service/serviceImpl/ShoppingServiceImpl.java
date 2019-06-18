@@ -72,13 +72,12 @@ public class ShoppingServiceImpl implements ShoppingService {
            else if (distance < 10000)
                freight = 8;
 
-
            //根据用户级别进行打折
            DecimalFormat df = new DecimalFormat("0.00");
            if (member.getLevel() == 4) {
                price *= 0.85;
            } else if (member.getLevel() == 3) {
-               price *= 0.92;
+               price *= 0.9;
            } else if (member.getLevel() == 2) {
                price *= 0.95;
            }

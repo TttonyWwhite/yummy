@@ -212,8 +212,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         List<Restaurant> list = restaurantMapper.selectAll();
         List<RestaurantVO_post> retList = new ArrayList<>();
         for (Restaurant rest : list) {
-            if (getDistance(lat, lng, rest) < 10000)
-                retList.add(new RestaurantVO_post(rest));
+            double distance = getDistance(lat, lng, rest);
+            if (distance < 10000)
+                retList.add(new RestaurantVO_post(rest, distance / 1000));
         }
         return retList;
     }

@@ -45,6 +45,19 @@ public class RestaurantVO_post {
         if (deliveryTime < 20) deliveryTime += 20;
     }
 
+    public RestaurantVO_post(Restaurant restaurant, double distance) {
+        this.shopName = restaurant.getShopName();
+        this.imgUrl = restaurant.getImgurl();
+        this.restaurantId = restaurant.getRestaurantId();
+        rate = rand.nextInt(5);
+        if (distance <= 3) deliveryCost = 0;
+        else if (distance <= 5) deliveryCost = 2;
+        else if (distance <= 7) deliveryCost = 3;
+        else deliveryCost = 5;
+
+        deliveryTime = (int) (distance * 5);
+    }
+
     public String getShopName() {
         return shopName;
     }

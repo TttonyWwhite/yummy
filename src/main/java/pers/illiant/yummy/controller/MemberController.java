@@ -84,6 +84,11 @@ public class MemberController {
         return memberService.getAddress(memberId);
     }
 
+    @RequestMapping("/getDefaultAddress")
+    public Result getDefaultAddress(@RequestParam Integer memberId) {
+        return memberService.getDefaultAddress(memberId);
+    }
+
     @RequestMapping("/getMemberLevel")
     public Result getMemberLevel(@RequestParam Integer memberId) {
         return memberService.getMemberLevel(memberId);

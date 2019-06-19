@@ -11,7 +11,7 @@
     <result column="member_password" jdbcType="VARCHAR" property="memberPassword" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phoneNumber" jdbcType="VARCHAR" property="phoneNumber" />
-    <result column="default_address" jdbcType="VARCHAR" property="defaultAddress" />
+    <result column="default_address" jdbcType="INTEGER" property="defaultAddress" />
     <result column="level" jdbcType="INTEGER" property="level" />
     <result column="active" jdbcType="BIT" property="active" />
     <result column="balance" jdbcType="DOUBLE" property="balance" />
@@ -36,7 +36,7 @@
       phoneNumber, default_address, `level`, 
       active, balance)
     values (#{memberName,jdbcType=VARCHAR}, #{memberPassword,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{defaultAddress,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER},
+      #{phoneNumber,jdbcType=VARCHAR}, #{defaultAddress,jdbcType=INTEGER}, #{level,jdbcType=INTEGER},
       #{active,jdbcType=BIT}, #{balance, jdbcType=DOUBLE})
   </insert>
   <update id="updateByPrimaryKey" parameterType="pers.illiant.yummy.entity.Member">
@@ -49,7 +49,7 @@
       member_password = #{memberPassword,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       phoneNumber = #{phoneNumber,jdbcType=VARCHAR},
-      default_address = #{defaultAddress,jdbcType=VARCHAR},
+      default_address = #{defaultAddress,jdbcType=INTEGER},
       `level` = #{level,jdbcType=INTEGER},
       active = #{active,jdbcType=BIT},
       balance = #{balance, jdbcType=DOUBLE}

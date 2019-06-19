@@ -55,7 +55,7 @@ public class Member implements Serializable {
      *
      * @mbg.generated
      */
-    private String defaultAddress;
+    private int defaultAddress;
 
     /**
      *
@@ -214,7 +214,7 @@ public class Member implements Serializable {
      *
      * @mbg.generated
      */
-    public String getDefaultAddress() {
+    public int getDefaultAddress() {
         return defaultAddress;
     }
 
@@ -226,8 +226,8 @@ public class Member implements Serializable {
      *
      * @mbg.generated
      */
-    public void setDefaultAddress(String defaultAddress) {
-        this.defaultAddress = defaultAddress == null ? null : defaultAddress.trim();
+    public void setDefaultAddress(int defaultAddress) {
+        this.defaultAddress = defaultAddress;
     }
 
     /**

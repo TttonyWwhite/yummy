@@ -213,6 +213,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Result getDefaultAddress(int memberId) {
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        int addressId = member.getDefaultAddress();
+        Address address = addressMapper.selectByPrimaryKey(addressId);
+
+        return ResultUtils.success(address);
+    }
+
+    @Override
     public Result getMemberLevel(int memberId) {
         Member member = memberMapper.selectByPrimaryKey(memberId);
         return ResultUtils.success(member.getLevel());

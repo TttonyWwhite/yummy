@@ -37,6 +37,8 @@ public interface MemberService {
 
     Result getAddress(int memberId);
 
+    Result getDefaultAddress(int memberId);
+
     Result getMemberLevel(int memberId);
 
     /**

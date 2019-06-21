@@ -174,7 +174,7 @@ public class MemberServiceImpl implements MemberService {
             return ResultUtils.error(11116, "增加地址失败");
         }
 
-        return ResultUtils.success();
+        return ResultUtils.success(address.getAddressId());
     }
 
     @Override
@@ -213,12 +213,34 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Result getDetailAddress(int memberId) {
+        List<Address> list= new ArrayList<>();
+        try {
+            list = addressMapper.selectByMemberId(memberId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.error(11117, "查询地址失败");
+        }
+
+        return ResultUtils.success(list);
+    }
+
+    @Override
     public Result getDefaultAddress(int memberId) {
         Member member = memberMapper.selectByPrimaryKey(memberId);
         int addressId = member.getDefaultAddress();
         Address address = addressMapper.selectByPrimaryKey(addressId);
 
         return ResultUtils.success(address);
+    }
+
+    @Override
+    public Result setDefaultAddress(int memberId, int addressId) {
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        member.setDefaultAddress(addressId);
+        memberMapper.updateByPrimaryKey(member);
+
+        return ResultUtils.success();
     }
 
     @Override

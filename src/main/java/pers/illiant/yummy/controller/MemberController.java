@@ -80,13 +80,22 @@ public class MemberController {
 
     @RequestMapping("/getAddress")
     public Result getAddress(@RequestParam Integer memberId) {
-
         return memberService.getAddress(memberId);
+    }
+
+    @RequestMapping("/getDetailAddress")
+    public Result getDetailAddress(@RequestParam Integer memberId) {
+        return memberService.getDetailAddress(memberId);
     }
 
     @RequestMapping("/getDefaultAddress")
     public Result getDefaultAddress(@RequestParam Integer memberId) {
         return memberService.getDefaultAddress(memberId);
+    }
+
+    @RequestMapping("/setDefaultAddress")
+    public Result setDefaultAddress(@RequestParam Integer memberId, @RequestParam Integer addressId) {
+        return memberService.setDefaultAddress(memberId, addressId);
     }
 
     @RequestMapping("/getMemberLevel")

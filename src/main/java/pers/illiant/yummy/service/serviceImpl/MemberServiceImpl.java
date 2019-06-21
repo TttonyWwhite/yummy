@@ -110,6 +110,7 @@ public class MemberServiceImpl implements MemberService {
         post.setMemberId(memberId);
         post.setMemberName(member.getMemberName());
         post.setPhoneNumber(member.getPhoneNumber());
+        post.setEmail(member.getEmail());
         List<Address> addresses = addressMapper.selectByMemberId(memberId);
         post.setAddresses(addresses);
         return ResultUtils.success(post);

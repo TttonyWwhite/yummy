@@ -9,15 +9,17 @@ public class MemberVO_post {
     private int memberId;
     private String memberName;
     private String phoneNumber;
+    private String email;
     private List<Address> addresses;
 
     public MemberVO_post() {
     }
 
-    public MemberVO_post(int memberId, String memberName, String phoneNumber, List<Address> addresses) {
+    public MemberVO_post(int memberId, String memberName, String phoneNumber, String email, List<Address> addresses) {
         this.memberId = memberId;
         this.memberName = memberName;
         this.phoneNumber = phoneNumber;
+        this.email = email;
         this.addresses = addresses;
     }
 
@@ -35,6 +37,14 @@ public class MemberVO_post {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<Address> getAddresses() {

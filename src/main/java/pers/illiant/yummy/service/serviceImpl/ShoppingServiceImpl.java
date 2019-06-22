@@ -63,14 +63,14 @@ public class ShoppingServiceImpl implements ShoppingService {
            }
 
            Member member = memberMapper.selectByPrimaryKey(order.getMemberId());
-           double freight = 0;
-           double distance = getDistance(address, restaurant);
-           if (distance < 1000)
-               freight = 2;
-           else if (distance < 3000)
-               freight = 5;
-           else if (distance < 10000)
-               freight = 8;
+//           double freight = 0;
+//           double distance = getDistance(address, restaurant);
+//           if (distance < 1000)
+//               freight = 2;
+//           else if (distance < 3000)
+//               freight = 5;
+//           else if (distance < 10000)
+//               freight = 8;
 
            //根据用户级别进行打折
            DecimalFormat df = new DecimalFormat("0.00");
@@ -87,7 +87,7 @@ public class ShoppingServiceImpl implements ShoppingService {
            OrderInfo info = new OrderInfo();
            //此时订单状态为NotPaid
 
-           info = new OrderInfo(order.getMemberId(), order.getRestaurantId(), order.getOrderTime(), order.getExpectTime(), price, freight, "NotPaid", order.getAddressId());
+           info = new OrderInfo(order.getMemberId(), order.getRestaurantId(), order.getOrderTime(), order.getExpectTime(), price, order.getFreight(), "NotPaid", order.getAddressId());
 
            orderInfoMapper.insert(info);
 
